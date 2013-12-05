@@ -1,0 +1,36 @@
+
+<section>
+
+	<ul data-kendo-role="menu">
+    <li>Normal Item
+        <ul>
+            <li><span class="k-sprite icon-class"></span>Item with a Sprite</li>
+            <li><img src="Icons/contacts.gif" />Item with an Icon</li>
+        </ul>
+    </li>
+    <li><a href="http://www.google.com">Navigation Item</a></li>
+    <li class="k-state-active">Active Item</li>
+    <li>Template Item
+        <div class="k-group k-content">
+            Test button - <a class="k-button">Button</a>
+        </div>
+    </li>
+  </ul>
+
+  <!-- ko if: router.isNavigating -->
+  <div  class='ajax-loader'>
+    <img src="images/ajax-loader.gif">
+  </div>
+  <!-- /ko -->
+
+  <div data-bind="visible: !router.isNavigating()">
+      <!-- ko router: {transition:'entrance', cacheViews:true} -->
+      <!-- /ko -->
+  </div>
+
+</section>
+
+
+
+
+

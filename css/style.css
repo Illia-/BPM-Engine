@@ -1,0 +1,20 @@
+.ajax-loader
+{
+	position: absolute;
+	top: 50%;
+	right: 50%;
+	margin-left: -16px;
+	margin-top: -16px;
+}
+
+.mart0 {
+	margin-top : 0;
+}
+
+.mart2 {
+	margin-top : 2%;
+}
+
+.mart5 {
+	margin-top : 5%;
+}
