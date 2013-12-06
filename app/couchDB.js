@@ -3,20 +3,21 @@ define([], function() {
   var db, server;
 
   return {
-    initialize  : initialize,
-    createDoc   : createDoc,
-    updateDoc   : updateDoc,
-    deleteDoc   : deleteDoc,
-    copyDoc     : copyDoc,
-    getDoc      : getDoc,
-    getDocs     : getDocs,
-    getUserRoles: getUserRoles
+    initialize     : initialize,
+    createDoc      : createDoc,
+    updateDoc      : updateDoc,
+    deleteDoc      : deleteDoc,
+    copyDoc        : copyDoc,
+    getDoc         : getDoc,
+    getDocs        : getDocs,
+    getUserRoles   : getUserRoles,
+    checkConnection: checkConnection
   };
 
   function initialize(credential) {
     var deferred = Q.defer();
     Couch.init(function() {
-      var server = new Couch.Server('http://localhost:5984', credential.userName, credential.password);
+      server = new Couch.Server('http://localhost:5984', credential.userName, credential.password);
       db = new Couch.Database(server, 'bpm-engine');
       deferred.resolve();
     });
@@ -115,6 +116,21 @@ define([], function() {
         deferred.reject();
       }
     });
+    return deferred.promise;
+  }
+
+  function checkConnection(url) {
+    var deferred = Q.defer();
+
+    db.get(url, function(response) {
+      if(!response.status) { // Если есть поле status в ответе, значит произошла какая-то ошибка
+        deferred.resolve(response);
+      }
+      else {
+        deferred.reject();
+      }
+    });
+
     return deferred.promise;
   }
 

@@ -14,6 +14,8 @@ define(['services/appSecurity', 'couchDB'],
       login: function() {
         var credential = new appSecurity.Credential(this.userName(), this.password());
 
+        appSecurity.user.name(this.userName());
+
         db.initialize(credential)
           .then(function() {
             appSecurity.isAuthenticated()
@@ -21,18 +23,6 @@ define(['services/appSecurity', 'couchDB'],
                 console.log(appSecurity.user.role());
               });
           });
-
-        /*.then(function(data){
-         console.log(data);
-         appSecurity.user({IsAuthenticated: true, Username: data.value.login, Role: data.value.role});
-         console.log(appSecurity.user());
-
-         self.userName('');
-         self.password('');
-         }).fail(function(){
-         console.log('aaaa error');
-         });
-         */
       },
 
       /**

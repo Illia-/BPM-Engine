@@ -1,8 +1,8 @@
 /**
  * Authentication module for the entire application
  */
-define(['dataContext'],
-  function(dataContext) {
+define(['couchDB'],
+  function(db) {
 
     var self = {};
 
@@ -35,55 +35,34 @@ define(['dataContext'],
 
     self.isAuthenticated = function() {
       var deferred = Q.defer();
-      dataContext.get("_security", function(data) {
-        if(typeof data.admins !== "undefined") {
-          var index = data.admins.names.indexOf(self.user.name());
-          if(index != -1) {
-            self.user.role(data.admins.roles[index]);
-            deferred.resolve();
-          }
-          else {
-            deferred.reject();
-          }
-        }
-        else {
+      db.checkConnection('')
+        .then(function() {
+          db.getUserRoles(self.user.name())
+            .then(function(roles) {
+              self.user.role(roles[0]);
+              deferred.resolve();
+            })
+        })
+        .fail(function() {
           deferred.reject();
-        }
-      });
+        });
       return deferred.promise;
     };
-    /**
-     * Sign in a user
-     * @return {promise}
-     */
-    /*
-     login: function(credential) {
-     var deferred = Q.defer();
-     dataContext.get('_design/auth/_view/login?startkey=["' + credential.userName + '","' + credential.password + '"]&endkey=["' + credential.userName + '","' + credential.password + '"]',
-     function(resp) {
-     if(typeof resp.rows[0] !== 'undefined') {
-     deferred.resolve(resp.rows[0]);
-     }
-     else {
-     deferred.reject();
-     }
-     });
-     return deferred.promise;
-     },
-     */
     /**
      * Sign out an user
      * @method
      * @return {promise}
      */
     self.logout = function() {
-      self.user({IsAuthenticated: false, UserName: '', Role: ''});
+      self.user.name('');
+      self.user.role('');
     }
 
     return {
-      credential     : self.credential,
+      Credential     : self.Credential,
       user           : self.user,
-      isAuthenticated: self.isAuthenticated
+      isAuthenticated: self.isAuthenticated,
+      logout         : self.logout
 
     };
 
