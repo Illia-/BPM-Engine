@@ -210,7 +210,7 @@ define(['functions/userFunction', 'couchDB'],
       return deferred.promise;
     }
 
-    function runWorkflow(templateId, cardId) {
+    function runWorkflow(templateId, cardId, user) {
       var deferred = Q.defer();
       getTemplate(templateId).then(function(res1) {
 
@@ -231,6 +231,7 @@ define(['functions/userFunction', 'couchDB'],
           templateId   : templateId,
           type         : 'workflow',
           cardId       : cardId,
+          initiator    : user,
           status       : 'runned',
           currentBlocks: []
         };

@@ -3,15 +3,14 @@ define([], function() {
   var db, server;
 
   return {
-    initialize  : initialize,
-    createDoc   : createDoc,
-    updateDoc   : updateDoc,
-    deleteDoc   : deleteDoc,
-    copyDoc     : copyDoc,
-    getDoc      : getDoc,
-    getDocs     : getDocs,
-    getUserRoles: getUserRoles,
-    logout      : logout
+    initialize: initialize,
+    createDoc : createDoc,
+    updateDoc : updateDoc,
+    deleteDoc : deleteDoc,
+    copyDoc   : copyDoc,
+    getDoc    : getDoc,
+    getDocs   : getDocs,
+    logout: logout
   };
 
   function initialize(credential) {
@@ -171,6 +170,7 @@ define([], function() {
     return deferred.promise;
   }
 
+<<<<<<< HEAD
   function checkConnection(url) {
     var deferred = Q.defer();
 
@@ -206,4 +206,6 @@ define([], function() {
     return deferred.promise;
   }
 
+=======
+>>>>>>> 8ff35d52b76e2a42f6895ec7211f13ab9b18953b
 });
