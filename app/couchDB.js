@@ -1,23 +1,23 @@
-define([], function(){
+define([], function() {
 
   var db, server;
 
   return {
-    initialize: initialize,
-    createDoc : createDoc,
-    updateDoc : updateDoc,
-    deleteDoc : deleteDoc,
-    copyDoc   : copyDoc,
-    getDoc    : getDoc,
-    getDocs   : getDocs,
+    initialize  : initialize,
+    createDoc   : createDoc,
+    updateDoc   : updateDoc,
+    deleteDoc   : deleteDoc,
+    copyDoc     : copyDoc,
+    getDoc      : getDoc,
+    getDocs     : getDocs,
     getUserRoles: getUserRoles
   };
 
-  function initialize(url, user, pass, dbname) {
+  function initialize(credential) {
     var deferred = Q.defer();
     Couch.init(function() {
-      server = new Couch.Server(url, user, pass);
-      db = new Couch.Database(server, dbname);
+      var server = new Couch.Server('http://localhost:5984', credential.userName, credential.password);
+      db = new Couch.Database(server, 'bpm-engine');
       deferred.resolve();
     });
     return deferred.promise;
@@ -119,22 +119,23 @@ define([], function(){
   }
 
   function getUserRoles(login) {
-      var db_users = new Couch.Database(server, '_users'),
-          deferred = Q.defer();
-      db_users.get('_design/user_by_name/_view/all?key="'+login+'"', function(response) {
-          if (!response.status) { // Если есть поле status в ответе, значит произошла какая-то ошибка
-              var result = [];
-              for (var i = 0; i < response.rows.length; i++) {
-                  var doc = response.rows[i];
-                  result.push(doc);
-              }
-              deferred.resolve(result[0]['value'].roles);
-          } else {
-              alert(response.status + ': ' + response.statusText);
-              deferred.reject();
-          }
-      });
-      return deferred.promise;
+    var db_users = new Couch.Database(server, '_users'),
+      deferred = Q.defer();
+    db_users.get('_design/user_by_name/_view/all?key="' + login + '"', function(response) {
+      if(!response.status) { // Если есть поле status в ответе, значит произошла какая-то ошибка
+        var result = [];
+        for(var i = 0; i < response.rows.length; i++) {
+          var doc = response.rows[i];
+          result.push(doc);
+        }
+        deferred.resolve(result[0]['value'].roles);
+      }
+      else {
+        alert(response.status + ': ' + response.statusText);
+        deferred.reject();
+      }
+    });
+    return deferred.promise;
   }
 
 });

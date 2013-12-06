@@ -1,5 +1,5 @@
-define(['services/appSecurity', 'dataContext'],
-  function(appSecurity, dataContext) {
+define(['services/appSecurity', 'couchDB'],
+  function(appSecurity, db) {
     var userName = ko.observable(),
       password = ko.observable();
 
@@ -12,11 +12,10 @@ define(['services/appSecurity', 'dataContext'],
        * Login the user using forms auth
        */
       login: function() {
-        var credential = new appSecurity.credential(this.userName(), this.password());
-        console.log(credential);
-        dataContext.initialize(credential)
+        var credential = new appSecurity.Credential(this.userName(), this.password());
+
+        db.initialize(credential)
           .then(function() {
-            console.log(1);
             appSecurity.isAuthenticated()
               .then(function(){
                 console.log(appSecurity.user.role());

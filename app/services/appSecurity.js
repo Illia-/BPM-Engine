@@ -9,7 +9,7 @@ define(['dataContext'],
     /**
      * Helper class for building credentials
      */
-    self.credential = function(userName, password) {
+    self.Credential = function(userName, password) {
       //self.user.name(userName);
       this.userName = userName;
       this.password = password;
