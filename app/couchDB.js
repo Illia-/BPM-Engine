@@ -10,17 +10,64 @@ define([], function(){
     copyDoc   : copyDoc,
     getDoc    : getDoc,
     getDocs   : getDocs,
-    getUserRoles: getUserRoles
+    getUserRoles: getUserRoles,
+    logout: logout
   };
 
   function initialize(url, user, pass, dbname) {
     var deferred = Q.defer();
     Couch.init(function() {
-      server = new Couch.Server(url, user, pass);
+      server = new Couch.Server(url, null, null);
       db = new Couch.Database(server, dbname);
-      deferred.resolve();
+      auth(user, pass).then(function(result) {
+          deferred.resolve(result);
+      });
     });
     return deferred.promise;
+  }
+
+  function auth(user, pass) {
+      var deferred = Q.defer();
+      if (XMLHttpRequest) {
+          var request = new XMLHttpRequest();
+          if (request.withCredentials !== undefined) {
+              request.open('POST', 'http://localhost:5984/_session', true);
+              request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+              request.withCredentials = true;
+              request.onreadystatechange = function() {
+                  if (request.readyState != 4) return;
+                  if (request.status == 200) {
+                    deferred.resolve(request.responseText);
+                  } else {
+                    deferred.reject(request.statusText);
+                  }
+              };
+              request.send('name='+user+'&password='+pass);
+          }
+      }
+      return deferred.promise;
+  }
+
+  function logout() {
+      var deferred = Q.defer();
+      if (XMLHttpRequest) {
+          var request = new XMLHttpRequest();
+          if (request.withCredentials !== undefined) {
+              request.open('DELETE', 'http://localhost:5984/_session', true);
+              request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+              request.withCredentials = true;
+              request.onreadystatechange = function() {
+                  if (request.readyState != 4) return;
+                  if (request.status == 200) {
+                    deferred.resolve(request.responseText);
+                  } else {
+                    deferred.reject(request.statusText);
+                  }
+              };
+              request.send();
+          }
+      }
+      return deferred.promise;
   }
 
   function createDoc(doc) {
