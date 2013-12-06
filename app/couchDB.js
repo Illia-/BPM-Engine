@@ -3,24 +3,76 @@ define([], function() {
   var db, server;
 
   return {
-    initialize     : initialize,
-    createDoc      : createDoc,
-    updateDoc      : updateDoc,
-    deleteDoc      : deleteDoc,
-    copyDoc        : copyDoc,
-    getDoc         : getDoc,
-    getDocs        : getDocs,
-    getUserRoles   : getUserRoles,
-    checkConnection: checkConnection
+    initialize  : initialize,
+    createDoc   : createDoc,
+    updateDoc   : updateDoc,
+    deleteDoc   : deleteDoc,
+    copyDoc     : copyDoc,
+    getDoc      : getDoc,
+    getDocs     : getDocs,
+    getUserRoles: getUserRoles,
+    logout      : logout
   };
 
   function initialize(credential) {
     var deferred = Q.defer();
     Couch.init(function() {
-      server = new Couch.Server('http://localhost:5984', credential.userName, credential.password);
+      server = new Couch.Server('http://localhost:5984', null, null);
       db = new Couch.Database(server, 'bpm-engine');
-      deferred.resolve();
+      auth(credential.userName, credential.password).then(function(result) {
+        deferred.resolve(result);
+      });
     });
+    return deferred.promise;
+  }
+
+  function auth(user, pass) {
+    var deferred = Q.defer();
+    if(XMLHttpRequest) {
+      var request = new XMLHttpRequest();
+      if(request.withCredentials !== undefined) {
+        request.open('POST', 'http://localhost:5984/_session', true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        request.withCredentials = true;
+        request.onreadystatechange = function() {
+          if(request.readyState != 4) {
+            return;
+          }
+          if(request.status == 200) {
+            deferred.resolve(request.responseText);
+          }
+          else {
+            deferred.reject(request.statusText);
+          }
+        };
+        request.send('name=' + user + '&password=' + pass);
+      }
+    }
+    return deferred.promise;
+  }
+
+  function logout() {
+    var deferred = Q.defer();
+    if(XMLHttpRequest) {
+      var request = new XMLHttpRequest();
+      if(request.withCredentials !== undefined) {
+        request.open('DELETE', 'http://localhost:5984/_session', true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        request.withCredentials = true;
+        request.onreadystatechange = function() {
+          if(request.readyState != 4) {
+            return;
+          }
+          if(request.status == 200) {
+            deferred.resolve(request.responseText);
+          }
+          else {
+            deferred.reject(request.statusText);
+          }
+        };
+        request.send();
+      }
+    }
     return deferred.promise;
   }
 

@@ -13,15 +13,16 @@ define(['services/appSecurity', 'couchDB'],
        */
       login: function() {
         var credential = new appSecurity.Credential(this.userName(), this.password());
-
         appSecurity.user.name(this.userName());
-
         db.initialize(credential)
-          .then(function() {
+          .then(function(res) {
+            console.log(res);
+            /*
             appSecurity.isAuthenticated()
               .then(function(){
                 console.log(appSecurity.user.role());
               });
+              */
           });
       },
 

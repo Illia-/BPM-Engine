@@ -12,7 +12,10 @@ define(['functions/userFunction', 'couchDB'],
       completeTask      : completeTask,
       setVariable       : setVariable,
       getWorkflowBlocks : getWorkflowBlocks,
-      getBlockById      : getBlockById
+      getBlockById      : getBlockById,
+      getTasksByUser    : getTasksByUser,
+      getCompletedTasksByUser: getCompletedTasksByUser,
+      getWaitingTasksByUser: getWaitingTasksByUser
     };
 
     return engine;
@@ -23,6 +26,30 @@ define(['functions/userFunction', 'couchDB'],
         deferred.resolve({ok: true});
       });
       return deferred.promise;
+    }
+
+    function getTasksByUser(username) {
+        var deferred = Q.defer();
+        db.getDocs('_design/tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
+            deferred.resolve(result);
+        });
+        return deferred.promise;
+    }
+
+    function getCompletedTasksByUser(username) {
+        var deferred = Q.defer();
+        db.getDocs('_design/completed_tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
+            deferred.resolve(result);
+        });
+        return deferred.promise;
+    }
+
+    function getWaitingTasksByUser(username) {
+        var deferred = Q.defer();
+        db.getDocs('_design/waiting_tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
+            deferred.resolve(result);
+        });
+        return deferred.promise;
     }
 
     function getTemplates() {
