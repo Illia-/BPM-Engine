@@ -13,7 +13,9 @@ define(['functions/userFunction', 'couchDB'],
       setVariable       : setVariable,
       getWorkflowBlocks : getWorkflowBlocks,
       getBlockById      : getBlockById,
-      getTasksByUser    : getTasksByUser
+      getTasksByUser    : getTasksByUser,
+      getCompletedTasksByUser: getCompletedTasksByUser,
+      getWaitingTasksByUser: getWaitingTasksByUser
     };
 
     return engine;
@@ -29,6 +31,22 @@ define(['functions/userFunction', 'couchDB'],
     function getTasksByUser(username) {
         var deferred = Q.defer();
         db.getDocs('_design/tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
+            deferred.resolve(result);
+        });
+        return deferred.promise;
+    }
+
+    function getCompletedTasksByUser(username) {
+        var deferred = Q.defer();
+        db.getDocs('_design/completed_tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
+            deferred.resolve(result);
+        });
+        return deferred.promise;
+    }
+
+    function getWaitingTasksByUser(username) {
+        var deferred = Q.defer();
+        db.getDocs('_design/waiting_tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
             deferred.resolve(result);
         });
         return deferred.promise;
