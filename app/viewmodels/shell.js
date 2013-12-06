@@ -28,7 +28,8 @@ define(['plugins/router'], function(router){
 		router.map([
 			{ route: 'login',        moduleId: 'viewmodels/login',  title: 'Login',       nav: 1 },
 			//for user
-			{ route: 'admin/panel',  moduleId: 'admin/panel',       title: 'Work space',  nav: false,  authorize: ["user"] }
+			{ route: 'admin/panel',  moduleId: 'admin/panel',       title: 'Work space',  nav: false,  authorize: ["user"] },
+      { route: 'start',        moduleId: 'viewmodels/start',  title: 'testStart',       nav: 1 }
 		]).buildNavigationModel();
 
 		//dynamically generating our navigation structure based on the router's navigationModel array
