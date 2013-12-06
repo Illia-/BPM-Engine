@@ -10,7 +10,6 @@ define([], function(){
     copyDoc   : copyDoc,
     getDoc    : getDoc,
     getDocs   : getDocs,
-    getUserRoles: getUserRoles,
     logout: logout
   };
 
