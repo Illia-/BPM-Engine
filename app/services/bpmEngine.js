@@ -2,24 +2,24 @@ define(['functions/userFunction', 'couchDB'],
   function(userFunction, db) {
 
     var engine = {
-      initialize        : initialize,
-      getTemplates      : getTemplates,
-      addTemplate       : addTemplate,
-      getTemplate       : getTemplate,
-      runWorkflow       : runWorkflow,
-      processingWorkflow: processingWorkflow,
-      orchestrate       : orchestrate,
-      completeTask      : completeTask,
-      setVariable       : setVariable,
-      getWorkflowBlocks : getWorkflowBlocks,
-      getBlockById      : getBlockById,
-      getTasksByUser    : getTasksByUser,
+     // initialize             : initialize,
+      getTemplates           : getTemplates,
+      addTemplate            : addTemplate,
+      getTemplate            : getTemplate,
+      runWorkflow            : runWorkflow,
+      processingWorkflow     : processingWorkflow,
+      orchestrate            : orchestrate,
+      completeTask           : completeTask,
+      setVariable            : setVariable,
+      getWorkflowBlocks      : getWorkflowBlocks,
+      getBlockById           : getBlockById,
+      getTasksByUser         : getTasksByUser,
       getCompletedTasksByUser: getCompletedTasksByUser,
-      getWaitingTasksByUser: getWaitingTasksByUser
+      getWaitingTasksByUser  : getWaitingTasksByUser
     };
 
     return engine;
-
+/*
     function initialize(url, user, pass, dbname) {
       var deferred = Q.defer();
       db.initialize(url, user, pass, dbname).then(function() {
@@ -27,29 +27,29 @@ define(['functions/userFunction', 'couchDB'],
       });
       return deferred.promise;
     }
-
+*/
     function getTasksByUser(username) {
-        var deferred = Q.defer();
-        db.getDocs('_design/tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
-            deferred.resolve(result);
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      db.getDocs('_design/tasks_by_user/_view/all?key="' + username + '"').then(function(result) {
+        deferred.resolve(result);
+      });
+      return deferred.promise;
     }
 
     function getCompletedTasksByUser(username) {
-        var deferred = Q.defer();
-        db.getDocs('_design/completed_tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
-            deferred.resolve(result);
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      db.getDocs('_design/completed_tasks_by_user/_view/all?key="' + username + '"').then(function(result) {
+        deferred.resolve(result);
+      });
+      return deferred.promise;
     }
 
     function getWaitingTasksByUser(username) {
-        var deferred = Q.defer();
-        db.getDocs('_design/waiting_tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
-            deferred.resolve(result);
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      db.getDocs('_design/waiting_tasks_by_user/_view/all?key="' + username + '"').then(function(result) {
+        deferred.resolve(result);
+      });
+      return deferred.promise;
     }
 
     function getTemplates() {

@@ -1,5 +1,6 @@
-define(['services/appSecurity'],
-  function(appSecurity) {
+define(['services/appSecurity','plugins/router'],
+  function(appSecurity, router) {
+
     var userName = ko.observable(),
       password = ko.observable();
 
@@ -17,6 +18,8 @@ define(['services/appSecurity'],
         appSecurity.login(credential)
           .then(function(loginData) {
             appSecurity.user(loginData);
+            userName('');
+            password('');
           })
       },
 
@@ -27,6 +30,7 @@ define(['services/appSecurity'],
         appSecurity.logout()
           .then(function() {
             appSecurity.user({name: null, roles: []});
+            router.navigate('#');
           });
       }
     }

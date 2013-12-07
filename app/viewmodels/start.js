@@ -3,9 +3,9 @@ define(['services/bpmEngine'],
 
     //var engine = bpmEngine();
     console.log(engine);
-    engine.initialize('http://localhost:5984', 'user1', 'qwerty', 'workflow').then(function(res1) {
+debugger;
       console.log('Main thread: Engine initialized:');
-      console.log(res1);
+      //console.log(res1);
       var template = {
         title : 'Template 1',
         type  : 'template',
@@ -150,7 +150,7 @@ define(['services/bpmEngine'],
           });
         });
       });
-    });
+
 
     return {};
 

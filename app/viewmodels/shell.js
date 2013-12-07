@@ -1,5 +1,5 @@
-define(['plugins/router', 'services/appSecurity'],
-  function(router, appSecurity) {
+define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
+  function(router, appSecurity, login) {
 
     var viewModel = kendo.observable({
       isVisible       : true,
@@ -10,7 +10,8 @@ define(['plugins/router', 'services/appSecurity'],
       router          : router,
       activate        : activate,
       appSecurity     : appSecurity,
-      wrongPermissions: ko.observable(false)
+      wrongPermissions: ko.observable(false),
+      login: login
     });
 
     return viewModel;
@@ -18,6 +19,7 @@ define(['plugins/router', 'services/appSecurity'],
     function activate() {
       // If the route has the authorize flag and the user is not logged in => navigate to login view
       router.guardRoute = function(instance, instruction) {
+
         if(instruction.config.authorize) {
           if(!appSecurity.user().name) {
             return "#login";
@@ -32,12 +34,15 @@ define(['plugins/router', 'services/appSecurity'],
         return true;
       }
       router.map([
-        { route: 'login', moduleId: 'viewmodels/login', title: 'Login', nav: 1 },
+        { route: '', moduleId: 'viewmodels/aboutProject', title: 'BPM engine'},
+        { route: 'login', moduleId: 'viewmodels/login', title: 'Login', nav: false},
         //for user
-        { route: 'user/main', moduleId: 'viewmodels/user/main', title: 'Main page', nav: 2, authorize: ["user"]},
+        { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Main page', nav: 1, authorize: ["user"]},
+        { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Create Card', nav: 2, authorize: ["user"]},
         //for admin
-        { route: 'admin/panel', moduleId: 'admin/panel', title: 'Work space', nav: false, authorize: ["user"] },
-        { route: 'start', moduleId: 'viewmodels/start', title: 'testStart', nav: 1 }
+        { route: 'admin/panel', moduleId: 'admin/panel', title: 'Work space', nav: false},
+
+        { route: 'start', moduleId: 'viewmodels/start', title: 'testStart', nav: false}
       ]).buildNavigationModel();
 
       //dynamically generating our navigation structure based on the router's navigationModel array
