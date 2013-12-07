@@ -65,13 +65,6 @@ define(['durandal/app', 'durandal/system', 'durandal/viewLocator', 'durandal/bin
            */
           viewLocator.useConvention();
 
-          //Doing this will allow Knockout to distinguish its bindings as data-bind and KendoUI to distinguish its bindings as data-kendo-bind.
-          kendo.ns = "kendo-";
-          //This bit of code automatically applies KendoUI bindings any time Durandal's binder is called
-          binder.binding = function(obj, view) {
-            kendo.bind(view, obj.viewModel || obj);
-          };
-          //Finally, can use 'data-bind' for normal bindings in your views and 'data-kendo-bind' for KendoUI controls
 
           /**
            * Sets the root module/view for the application.

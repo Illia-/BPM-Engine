@@ -1,6 +1,8 @@
 define([], function() {
 
-  var db;
+  var db,
+    baseUrl = 'http://localhost:5984',
+    dataBase = 'bpm-engine';
 
   return {
     initialize: initialize,
@@ -9,15 +11,16 @@ define([], function() {
     deleteDoc : deleteDoc,
     copyDoc   : copyDoc,
     getDoc    : getDoc,
-    getDocs   : getDocs
+    getDocs   : getDocs,
+    uploadFile: uploadFile
 
   };
 
   function initialize() {
     var deferred = Q.defer();
     Couch.init(function() {
-      var server = new Couch.Server('http://localhost:5984', null, null);
-      db = new Couch.Database(server, 'bpm-engine');
+      var server = new Couch.Server(baseUrl, null, null);
+      db = new Couch.Database(server, dataBase);
       deferred.resolve();
     });
     return deferred.promise;
@@ -117,4 +120,77 @@ define([], function() {
     });
     return deferred.promise;
   }
+
+
+  function uploadFile(doc, file) {
+    var deferred = Q.defer(),
+      name = encodeURIComponent(file.name),
+      type = file.type,
+      fileReader = new FileReader(),
+      request = new XMLHttpRequest();
+
+    request.open('PUT', baseUrl + '/' + dataBase + '/' + encodeURIComponent(doc.id) + '/' + name + '?rev=' + doc.rev, true);
+    request.setRequestHeader('Content-Type', type);
+    request.withCredentials = true;
+
+    fileReader.readAsArrayBuffer(file);
+    fileReader.onload = function (readerEvent) {
+      request.send(readerEvent.target.result);
+    };
+    request.onreadystatechange = function(response) {
+      if (request.readyState == 4) {
+        deferred.resolve(request.responseText);
+      }
+    };
+    return deferred.promise;
+  };
 });
+
+
+
+
+
+/*
+window.onload = function() {
+  var app = function() {
+    var baseUrl = 'http://127.0.0.1:5984/playground/';
+    var fileInput = document.forms['upload'].elements['file'];
+    document.forms['upload'].onsubmit = function() {
+      uploadFile('foo', fileInput.files[0]);
+      return false;
+    };
+
+    var uploadFile = function(document, file) {
+      var name = encodeURIComponent(file.name),
+        type = file.type,
+        fileReader = new FileReader(),
+        getRequest = new XMLHttpRequest(),
+        putRequest = new XMLHttpRequest();
+
+      getRequest.open('GET',  baseUrl + encodeURIComponent(document),
+        true);
+      getRequest.send();
+
+      getRequest.onreadystatechange = function(response) {
+        if (getRequest.readyState == 4 && getRequest.status == 200) {
+          var doc = JSON.parse(getRequest.responseText);
+          putRequest.open('PUT', baseUrl +
+            encodeURIComponent(document) + '/' +
+            name + '?rev=' + doc._rev, true);
+          putRequest.setRequestHeader('Content-Type', type);
+          fileReader.readAsArrayBuffer(file);
+          fileReader.onload = function (readerEvent) {
+            putRequest.send(readerEvent.target.result);
+          };
+          putRequest.onreadystatechange = function(response) {
+            if (putRequest.readyState == 4) {
+              console.log(putRequest);
+            }
+          };
+        }
+      };
+    };
+  };
+  app();
+};
+*/

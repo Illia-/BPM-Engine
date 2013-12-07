@@ -1,18 +1,14 @@
 define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
   function(router, appSecurity, login) {
 
-    var viewModel = kendo.observable({
+    var viewModel = {
       isVisible       : true,
-      onSelect        : function(e) {
-        var text = $(e.item).children(".k-link").text();
-        kendoConsole.log("event :: select(" + text + ")");
-      },
       router          : router,
       activate        : activate,
       appSecurity     : appSecurity,
       wrongPermissions: ko.observable(false),
       login: login
-    });
+    };
 
     return viewModel;
 
