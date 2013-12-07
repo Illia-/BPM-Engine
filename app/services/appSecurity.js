@@ -1,8 +1,8 @@
 /**
  * Authentication module for the entire application
  */
-define(['couchDB'],
-  function(db) {
+define([],
+  function() {
 
     var self = {};
 
@@ -10,14 +10,12 @@ define(['couchDB'],
      * Helper class for building credentials
      */
     self.Credential = function(userName, password) {
-      //self.user.name(userName);
       this.userName = userName;
       this.password = password;
     };
 
     /** user data */
-    self.user = {name: ko.observable(''),
-      role           : ko.observable('')};
+    self.user = ko.observable({name: null, roles: []});
 
     /**
      * Check if an user is in a role
@@ -26,44 +24,61 @@ define(['couchDB'],
       var self = this,
         isUserInRole = false;
       $.each(roles, function(key, value) {
-        if(self.user().Roles.indexOf(value) != -1) {
+        if(self.user().roles.indexOf(value) != -1) {
           isUserInRole = true;
         }
       });
       return isUserInRole;
     };
+    self._session = function(type, data) {
+      var deferred = Q.defer();
+      if(XMLHttpRequest) {
+        var request = new XMLHttpRequest();
+        if(request.withCredentials !== undefined) {
+          request.open(type, 'http://localhost:5984/_session', true);
+          request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          request.withCredentials = true;
+          request.onreadystatechange = function() {
+            if(request.readyState != 4) {
+              return;
+            }
+            if(request.status == 200) {
+              deferred.resolve(JSON.parse(request.responseText));
+            }
+            else {
+              deferred.reject(request.statusText);
+            }
+          };
+          request.send(data);
+        }
+      }
+      return deferred.promise;
+    }
 
     self.isAuthenticated = function() {
-      var deferred = Q.defer();
-      db.checkConnection('')
-        .then(function() {
-          db.getUserRoles(self.user.name())
-            .then(function(roles) {
-              self.user.role(roles[0]);
-              deferred.resolve();
-            })
-        })
-        .fail(function() {
-          deferred.reject();
-        });
-      return deferred.promise;
+      return self._session("GET", '');
     };
     /**
      * Sign out an user
-     * @method
      * @return {promise}
      */
     self.logout = function() {
-      self.user.name('');
-      self.user.role('');
+      return self._session("DELETE", '');
+    }
+
+    self.login = function(credential) {
+      console.log('appSecurity login');
+      return self._session("POST", 'name=' + credential.userName + '&password=' + credential.password);
     }
 
     return {
       Credential     : self.Credential,
       user           : self.user,
       isAuthenticated: self.isAuthenticated,
-      logout         : self.logout
-
+      logout         : self.logout,
+      login          : self.login,
+      isUserInRole   : self.isUserInRole
     };
 
-  });
+  })
+;

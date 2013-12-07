@@ -1,5 +1,5 @@
-define(['services/appSecurity', 'couchDB'],
-  function(appSecurity, db) {
+define(['services/appSecurity'],
+  function(appSecurity) {
     var userName = ko.observable(),
       password = ko.observable();
 
@@ -13,24 +13,21 @@ define(['services/appSecurity', 'couchDB'],
        */
       login: function() {
         var credential = new appSecurity.Credential(this.userName(), this.password());
-        appSecurity.user.name(this.userName());
-        db.initialize(credential)
-          .then(function(res) {
-            console.log(res);
-            /*
-            appSecurity.isAuthenticated()
-              .then(function(){
-                console.log(appSecurity.user.role());
-              });
-              */
-          });
+
+        appSecurity.login(credential)
+          .then(function(loginData) {
+            appSecurity.user(loginData);
+          })
       },
 
       /**
        * Logout user
        */
       logout: function() {
-        appSecurity.logout();
+        appSecurity.logout()
+          .then(function() {
+            appSecurity.user({name: null, roles: []});
+          });
       }
     }
     return viewModel;
