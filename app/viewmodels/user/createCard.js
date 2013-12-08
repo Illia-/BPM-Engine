@@ -1,12 +1,12 @@
-define(['services/bpmEngine', 'couchDB'],
-  function(engine, db) {
+define(['services/bpmEngine', 'couchDB', 'services/appSecurity'],
+  function(engine, db, appSecurity) {
     var viewModel = {
+      activate        : activate,
       createCard      : createCard,
       documentNumber  : ko.observable(),
       text            : ko.observable(),
       templates       : ko.observableArray([]),
-      selectedTemplate: ko.observable(),
-      activate        : activate,
+      selectedWorkflow: ko.observable(),
       file            : ko.observable()
     };
 
@@ -14,23 +14,29 @@ define(['services/bpmEngine', 'couchDB'],
 
     function createCard() {
       var file = viewModel.file().files[0];
-      var card = {"number": viewModel.documentNumber(),
-        "text"           : viewModel.text(),
-        "templates"      : viewModel.selectedTemplate().value._id
-      }
-      db.createDoc(card).then(function(doc){
-        console.log(doc);
-        db.uploadFile(doc, file).then(function(uploadedData){
-          console.log('------- Ураааа ------');
-          console.log(uploadedData)
+      var card = {"type": "doc",
+        "number"        : viewModel.documentNumber(),
+        "text"          : viewModel.text(),
+        "workflow"      : viewModel.selectedWorkflow().value._id,
+        "result"        : null
+      };
+      db.createDoc(card).then(function(doc) {
+        db.uploadFile(doc, file).then(function(uploadedData) {
+
+          console.log('viewModel.selectedWorkflow().value._id');
+          console.log(viewModel.selectedWorkflow().value._id);
+          engine.runWorkflow(viewModel.selectedWorkflow().value._id, uploadedData.id, appSecurity.user().name)
+            .then(function(data) {
+              console.log('engine.runWorkflow result');
+              console.log(data);
+              engine.orchestrate();
+            });
         });
       });
-
     };
 
     function activate() {
       return engine.getTemplates().then(function(value) {
-        console.log(value)
         viewModel.templates(value);
       });
     }

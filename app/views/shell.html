@@ -8,7 +8,11 @@
             <a data-bind="attr: { href: hash }, html: title"></a>
         </li>
     </ul>
+    <button type="button" class="btn btn-default" data-bind="click: orchestrate">Orchestrate</button>
     <ul class="nav navbar-nav navbar-right">
+      <li>
+        <h4><span class="label label-info" data-bind="text: appSecurity.user().name"></span></h4>
+      </li>
       <li data-bind="visible: !appSecurity.user().name">
         <a href="#login">Login</a>
       </li>

@@ -1,5 +1,5 @@
-define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
-  function(router, appSecurity, login) {
+define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/bpmEngine'],
+  function(router, appSecurity, login, engine) {
 
     var viewModel = {
       isVisible       : true,
@@ -7,12 +7,18 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
       activate        : activate,
       appSecurity     : appSecurity,
       wrongPermissions: ko.observable(false),
-      login: login
+      login           : login,
+      orchestrate : function(){
+       engine.orchestrate()
+      }
     };
 
     return viewModel;
 
     function activate() {
+      //configure routing
+      router.makeRelative({ moduleId: '' });
+
       // If the route has the authorize flag and the user is not logged in => navigate to login view
       router.guardRoute = function(instance, instruction) {
 
@@ -30,16 +36,20 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
         return true;
       }
       router.map([
-        { route: '', moduleId: 'viewmodels/aboutProject', title: 'BPM engine'},
-        { route: 'login', moduleId: 'viewmodels/login', title: 'Login', nav: false},
-        //for user
-        { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Main page', nav: 1, authorize: ["user"]},
-        { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Create Card', nav: 2, authorize: ["user"]},
-        //for admin
-        { route: 'admin/panel', moduleId: 'admin/panel', title: 'Work space', nav: false},
+          // for all
+          { route: '', moduleId: 'viewmodels/aboutProject', title: 'BPM engine', nav: false},
+          { route: 'login', moduleId: 'viewmodels/login', title: 'Login', nav: false},
+          //for user
+          { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Главная', nav: 1, authorize: ["user"]},
+          { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Создание карточки', nav: 2, authorize: ["user"]},
+          { route: 'user/waitingTasks', moduleId: 'viewmodels/user/waitingTasks', title: 'Входящие задания', nav: 3, authorize: ["user"]},
+          //for admin
+          { route: 'admin/panel', moduleId: 'admin/panel', title: 'Work space', nav: false},
 
-        { route: 'start', moduleId: 'viewmodels/start', title: 'testStart', nav: false}
-      ]).buildNavigationModel();
+          { route: 'start', moduleId: 'viewmodels/start', title: 'testStart', nav: false}
+        ])
+        .buildNavigationModel()
+        .mapUnknownRoutes("viewmodels/notFound", "not-found");
 
       //dynamically generating our navigation structure based on the router's navigationModel array
       return router.activate();

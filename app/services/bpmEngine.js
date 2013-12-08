@@ -79,6 +79,8 @@ define(['functions/userFunction', 'couchDB'],
     function getWorkflows() {
       var deferred = Q.defer();
       db.getDocs('_design/workflows/_view/all').then(function(result) {
+        console.log(' --getWorkflows-- ');
+        console.log(result);
         deferred.resolve(result);
       });
       return deferred.promise;

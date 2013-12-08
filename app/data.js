@@ -36,13 +36,49 @@ a = {
 
 
 {
-    "_id": "org.couchdb.user:Eric",
+    "_id": "org.couchdb.user:Jeff",
     "name": "Eric",
     "type": "user",
     "roles": ['user'],
     "password": "e1"
 }
+{
+  "_id": "org.couchdb.user:Jeff",
+  "name": "Jeff",
+  "type": "user",
+  "roles": ["user"],
+  "password": "j1"
+}
 
+{
+  "_id": "org.couchdb.user:Nick",
+  "name": "Nick",
+  "type": "user",
+  "roles": ["user"],
+  "password": "n1"
+}
+
+{
+  "_id": "org.couchdb.user:Petr",
+  "name": "Petr",
+  "type": "user",
+  "roles": ["user"],
+  "password": "p1"
+}
+
+{
+  "_id": "org.couchdb.user:Olivia",
+  "name": "Olivia",
+  "type": "user",
+  "roles": ["user"],
+  "password": "o1"
+}
+
+Eric   -  e1
+Jeff   -  j1
+Nick   -  n1
+Petr   -  p1
+Olivia -  o1
 /////////////////////////////////////
 
  {

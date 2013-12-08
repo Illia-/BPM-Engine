@@ -4,7 +4,9 @@
 define([],
   function() {
 
-    var self = {};
+    var self = {},
+      baseUrl = 'http://localhost:5984';
+      //baseUrl = 'http://5fee09f9.ngrok.com';
 
     /**
      * Helper class for building credentials
@@ -35,7 +37,7 @@ define([],
       if(XMLHttpRequest) {
         var request = new XMLHttpRequest();
         if(request.withCredentials !== undefined) {
-          request.open(type, 'http://localhost:5984/_session', true);
+          request.open(type, baseUrl + '/_session', true);
           request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
           request.withCredentials = true;
           request.onreadystatechange = function() {
