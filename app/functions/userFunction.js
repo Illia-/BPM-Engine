@@ -5,15 +5,15 @@ define([],
       testFunc: testFunc
     };
 
-    function testFunc(engine, workflowId) {
-      var deferred = Q.defer();
-      console.log('testFunc: engine:');
-      console.log(engine);
-      engine.setVariable(workflowId, 'result', '1').then(function(result) {
-        console.log('testFunc: OK');
-        console.log(result);
-        deferred.resolve(result);
-      });
-      return deferred.promise;
+    function testFunc(engine, db, workflow) {
+    	var deferred = Q.defer();
+    	var cardId = workflow.cardId;
+    	db.getDoc(cardId).then(function(doc) {
+    		var result = doc.result;
+    		engine.setVariable(workflow._id, 'result', result).then(function(res) {
+    			deferred.resolve(res);
+    		});
+    	});
+    	return deferred.promise;
     }
   });
