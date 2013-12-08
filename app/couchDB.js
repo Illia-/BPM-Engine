@@ -91,7 +91,7 @@ define([], function() {
     var deferred = Q.defer();
     db.get(id, function(response) {
       if(!response.status) { // Если есть поле status в ответе, значит произошла какая-то ошибка
-        doc = response.rows[0];
+        doc = response;
         deferred.resolve(doc);
       }
       else {
