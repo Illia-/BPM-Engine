@@ -120,7 +120,7 @@ define(['functions/userFunction', 'couchDB'],
 
     function getBlocks(blocks) {
       var deferred = Q.defer();
-      if(typeof(blocks) !== undefined) {
+      if(typeof(blocks) !== 'undefined') {
         var url = '_design/blocks/_view/all?keys=' + JSON.stringify(blocks);
       }
       else {
