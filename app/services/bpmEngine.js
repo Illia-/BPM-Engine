@@ -391,7 +391,7 @@ define(['functions/userFunction', 'couchDB'],
                             var deferred = Q.defer();
                             var func = block_.func;
                             if(typeof userFunction[func] == 'function') {
-                              userFunction[func](engine, workflow._id).then(function(res6) {
+                              userFunction[func](engine, db, workflow).then(function(res6) {
                                 var block = {
                                   workflowId: workflow._id,
                                   id        : block_.id,
