@@ -49,11 +49,32 @@ define(['functions/userFunction', 'couchDB'],
     }
 
     function getWaitingTasksByUser(username) {
-      var deferred = Q.defer();
-      db.getDocs('_design/waiting_tasks_by_user/_view/all?key="' + username + '"').then(function(result) {
-        deferred.resolve(result);
-      });
-      return deferred.promise;
+        var deferred = Q.defer();
+        db.getDocs('_design/waiting_tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
+            Q.allSettled(function() {
+                var promises = [];
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i]['value'].cardId) {
+                        promises.push(db.getDoc(result[i]['value'].cardId));
+                    }
+                }
+                return promises;
+            }()).then(function(results) {
+                var docs = [];
+                for (var i = 0; i < results.length; i++) {
+                    docs[results[i]['value']._id] = results[i]['value'];
+                }
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i]['value'].cardId) {
+                        if (docs[result[i]['value'].cardId]) {
+                            result[i].doc = docs[result[i]['value'].cardId];
+                        }    
+                    }
+                }
+                deferred.resolve(result);
+            });
+        });
+        return deferred.promise;
     }
 
     function getTemplates() {
