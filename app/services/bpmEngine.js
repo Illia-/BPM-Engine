@@ -15,7 +15,11 @@ define(['functions/userFunction', 'couchDB'],
       getBlockById           : getBlockById,
       getTasksByUser         : getTasksByUser,
       getCompletedTasksByUser: getCompletedTasksByUser,
-      getWaitingTasksByUser  : getWaitingTasksByUser
+      getWaitingTasksByUser  : getWaitingTasksByUser,
+      deleteWorkflows: deleteWorkflows,
+      deleteBlocks: deleteBlocks,
+      deleteTemplates: deleteTemplates,
+      deleteVariables: deleteVariables
     };
 
     return engine;
@@ -186,6 +190,14 @@ define(['functions/userFunction', 'couchDB'],
         deferred.resolve(result);
       });
       return deferred.promise;
+    }
+
+    function getVariables() {
+        var deferred = Q.defer();
+        db.getDocs('_design/variables/_view/all').then(function(result) {
+            deferred.resolve(result);
+        });
+        return deferred.promise;
     }
 
     function setVariableByName(workflowId, name, upd) {
@@ -519,6 +531,70 @@ define(['functions/userFunction', 'couchDB'],
         });
       });
       return deferred.promise;
+    }
+
+    function deleteWorkflows() {
+        var deferred = Q.defer();
+        getWorkflows().then(function(result) {
+            Q.allSettled(function() {
+                var promises = [];
+                for (var i = 0; i < result.length; i++) {
+                    promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
+                }
+                return promises;
+            }()).then(function(results) {
+                deferred.resolve(results);
+            });
+        });
+        return deferred.promise;
+    }
+    
+    function deleteBlocks() {
+        var deferred = Q.defer();
+        getBlocks(undefined).then(function(result) {
+            Q.allSettled(function() {
+                var promises = [];
+                for (var i = 0; i < result.length; i++) {
+                    promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
+                }
+                return promises;
+            }()).then(function(results) {
+                deferred.resolve(results);
+            });
+        });
+        return deferred.promise;
+    }
+    
+    function deleteTemplates() {
+        var deferred = Q.defer();
+        getTemplates().then(function(result) {
+            Q.allSettled(function() {
+                var promises = [];
+                for (var i = 0; i < result.length; i++) {
+                    promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
+                }
+                return promises;
+            }()).then(function(results) {
+                deferred.resolve(results);
+            });
+        });
+        return deferred.promise;
+    }
+    
+    function deleteVariables() {
+        var deferred = Q.defer();
+        getVariables().then(function(result) {
+            Q.allSettled(function() {
+                var promises = [];
+                for (var i = 0; i < result.length; i++) {
+                    promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
+                }
+                return promises;
+            }()).then(function(results) {
+                deferred.resolve(results);
+            });
+        });
+        return deferred.promise;
     }
 
   });
