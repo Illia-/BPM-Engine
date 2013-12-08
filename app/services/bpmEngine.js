@@ -486,11 +486,19 @@ define(['functions/userFunction', 'couchDB'],
     }
 
     function orchestrate() {
-      getWorkflows().then(function(result) {
-        for(var i = 0; i < result.rows.length; i++) {
-          processingWorkflow(result.rows[i].id);
-        }
-      });
+      var deferred = Q.defer();
+    	getWorkflows().then(function(result) {
+        	Q.allSettled(function() {
+                var promises = [];
+                for (var i = 0; i < result.length; i++) {
+                    promises.push(processingWorkflow(result[i].id));
+                }
+                return promises;
+            }()).then(function(results) {
+                deferred.resolve(results);
+            });
+    	});
+      return deferred.promise;
     }
 
     function completeTask(id) {
