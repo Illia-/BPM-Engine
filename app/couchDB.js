@@ -96,7 +96,7 @@ define([], function() {
         deferred.resolve(doc);
       }
       else {
-        alert(response.status + ': ' + response.statusText);
+        //alert(response.status + ': ' + response.statusText);
         deferred.reject();
       }
     });
