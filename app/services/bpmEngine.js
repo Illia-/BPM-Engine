@@ -542,6 +542,10 @@ define(['functions/userFunction', 'couchDB'],
       return deferred.promise;
     }
 
+    /**
+     * @param id -
+     * @returns {promise}
+     */
     function completeTask(id) {
       var deferred = Q.defer();
       getBlock(id).then(function(res1) {

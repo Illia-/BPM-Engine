@@ -32,19 +32,23 @@ define(['services/bpmEngine', 'services/appSecurity', 'durandal/system', 'couchD
     function saveCard() {
       var file = viewModel.file().files[0];
       if(viewModel.selectedResult() !== 'null'){
-        selectedTask().doc.result = viewModel.selectedResult() == "true";
+        selectedTask().doc.result = (viewModel.selectedResult() == "true" ? 1: 0);
         if(typeof file !== 'undefined'){
           delete selectedTask().doc._attachments;
         }
         db.updateDoc(selectedTask().doc._id, selectedTask().doc).then(function(doc){
           console.log(doc);
           if(typeof file !== 'undefined'){
-            db.uploadFile(doc, file).then(function(doc){
-              engine.orchestrate();
+            db.uploadFile(doc, file).then(function(){
+              engine.completeTask(selectedTask().id).then(function(){
+                engine.orchestrate();
+              })
             });
           }
           else{
-            engine.orchestrate();
+            engine.completeTask(selectedTask().id).then(function(){
+              engine.orchestrate();
+            })
           }
         });
 
