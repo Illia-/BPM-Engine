@@ -1,4 +1,4 @@
-define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/bpmEngine'],
+define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
   function(router, appSecurity, login, engine) {
 
     var viewModel = {
@@ -7,11 +7,14 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/
       activate        : activate,
       appSecurity     : appSecurity,
       wrongPermissions: ko.observable(false),
-      login           : login,
-      orchestrate : function(){
-       engine.orchestrate()
-      }
+      login           : login
     };
+
+    viewModel.accessRoutes = ko.computed(function () {
+      return ko.utils.arrayFilter(router.navigationModel(), function (route) {
+        return appSecurity.isUserInRole(route.authorize);
+      });
+    });
 
     return viewModel;
 
@@ -21,7 +24,6 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/
 
       // If the route has the authorize flag and the user is not logged in => navigate to login view
       router.guardRoute = function(instance, instruction) {
-
         if(instruction.config.authorize) {
           if(!appSecurity.user().name) {
             return "#login";
@@ -40,12 +42,13 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/
           { route: '', moduleId: 'viewmodels/aboutProject', title: 'BPM engine', nav: false},
           { route: 'login', moduleId: 'viewmodels/login', title: 'Login', nav: false},
           //for user
-          { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Главная', nav: 1, authorize: ["user"]},
+          { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Главная', nav:1, authorize: ["user"]},
           { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Создание карточки', nav: 2, authorize: ["user"]},
           { route: 'user/waitingTasks', moduleId: 'viewmodels/user/waitingTasks', title: 'Входящие задания', nav: 3, authorize: ["user"]},
           //for admin
-          { route: 'admin/panel', moduleId: 'admin/panel', title: 'Work space', nav: false},
-
+          { route: 'admin/panel', moduleId: 'admin/panel', title: 'Work space', nav: 1, authorize: ["admin"]},
+          //development
+          { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: 10, authorize: ["user","admin"]},
           { route: 'start', moduleId: 'viewmodels/start', title: 'testStart', nav: false}
         ])
         .buildNavigationModel()

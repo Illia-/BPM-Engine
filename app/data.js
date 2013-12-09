@@ -36,6 +36,14 @@ a = {
 
 
 {
+  "_id": "org.couchdb.user:Andrey",
+  "name": "Andrey",
+  "type": "user",
+  "roles": ["admin"],
+  "password": "a1"
+}
+
+{
     "_id": "org.couchdb.user:Jeff",
     "name": "Eric",
     "type": "user",

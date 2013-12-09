@@ -25,17 +25,9 @@
                 </form>                      
             </div>
         </div>
-  
         <div class="jumbotron" data-bind="visible: appSecurity.user().name">
             <h2>You are actually logged in</h2>
             <a class="btn btn-primary" data-bind="click : logout">Logout</a>
         </div>
-
-        <div class="jumbotron" data-bind="visible: appSecurity.user().name">
-            <h2>You are actually logged in but cannot access this route with your current permissions</h2>
-            <p class="lead">Sign out and enter again the credentials with the correct permissions</p>
-            <a class="btn btn-primary" data-bind="click: logout">Logout</a>
-        </div>
-
     </div>
 </div>

@@ -1,5 +1,5 @@
-define(['services/bpmEngine', 'services/appSecurity', 'durandal/system'],
-  function(engine, appSecurity, system) {
+define(['services/bpmEngine', 'services/appSecurity', 'durandal/system', 'couchDB'],
+  function(engine, appSecurity, system, db) {
     var selectedTask = ko.observable(''),
       viewModel = {
         activate   : activate,
@@ -14,7 +14,9 @@ define(['services/bpmEngine', 'services/appSecurity', 'durandal/system'],
             return false;
           }
         ),
-        saveCard   : saveCard
+        saveCard   : saveCard,
+        file: ko.observable(),
+        selectedResult: ko.observable()
       };
 
     return viewModel;
@@ -28,7 +30,25 @@ define(['services/bpmEngine', 'services/appSecurity', 'durandal/system'],
     }
 
     function saveCard() {
+      var file = viewModel.file().files[0];
+      if(viewModel.selectedResult() !== 'null'){
+        selectedTask().doc.result = viewModel.selectedResult() == "true";
+        if(typeof file !== 'undefined'){
+          delete selectedTask().doc._attachments;
+        }
+        db.updateDoc(selectedTask().doc._id, selectedTask().doc).then(function(doc){
+          console.log(doc);
+          if(typeof file !== 'undefined'){
+            db.uploadFile(doc, file).then(function(doc){
+              engine.orchestrate();
+            });
+          }
+          else{
+            engine.orchestrate();
+          }
+        });
 
+      }
     }
 
     function parseAttachments(doc) {

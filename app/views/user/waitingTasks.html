@@ -16,12 +16,12 @@
 
 
   <div class="col-lg-8" data-bind="if: taskForShow">
-    <form data-bind="submit: saveCard, with: taskForShow" role="form">
+    <form data-bind="submit: saveCard" role="form">
       <div class="page-header">
         <h4>Отработка документа</h4>
       </div>
       <div class="form-group">
-        <dl class="dl-horizontal">
+        <dl class="dl-horizontal" data-bind="with: taskForShow">
           <dt>Номер документа</dt>
           <dd data-bind="text: number"></dd>
           <dt>Описание</dt>
@@ -33,7 +33,25 @@
         </dl>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn btn-primary" >Save</button>
+      <div class="fileinput fileinput-new" data-provides="fileinput">
+        <span class="btn btn-default btn-file">
+          <span class="fileinput-new">Выбрать файл</span>
+          <span class="fileinput-exists">Изменить</span>
+          <input type="file" data-bind="element: file"></span>
+        <span class="fileinput-filename"></span>
+        <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label" >Решение</label>
+      <select class="form-control" data-bind="value: selectedResult">
+        <option value="null">выбрать...</option>
+        <option value="true">Согласовать</option>
+        <option value="false">Отклонить</option>
+      </select>
+    </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" >Подтвердить</button>
       </div>
     </form>
   </div>
