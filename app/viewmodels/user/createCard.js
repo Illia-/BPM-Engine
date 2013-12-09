@@ -22,10 +22,7 @@ define(['services/bpmEngine', 'couchDB', 'services/appSecurity'],
       };
       db.createDoc(card).then(function(doc) {
         db.uploadFile(doc, file).then(function(uploadedData) {
-
-          console.log('viewModel.selectedWorkflow().value._id');
-          console.log(viewModel.selectedWorkflow().value._id);
-          engine.runWorkflow(viewModel.selectedWorkflow().value._id, uploadedData.id, appSecurity.user().name)
+          engine.runWorkflow(viewModel.selectedWorkflow().value._id, JSON.parse(uploadedData).id, appSecurity.user().name)
             .then(function(data) {
               console.log('engine.runWorkflow result');
               console.log(data);
