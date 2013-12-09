@@ -19,7 +19,8 @@ define(['functions/userFunction', 'couchDB'],
       deleteWorkflows: deleteWorkflows,
       deleteBlocks: deleteBlocks,
       deleteTemplates: deleteTemplates,
-      deleteVariables: deleteVariables
+      deleteVariables: deleteVariables,
+      getWorkflowsByUser: getWorkflowsByUser
     };
 
     return engine;
@@ -38,6 +39,14 @@ define(['functions/userFunction', 'couchDB'],
         deferred.resolve(result);
       });
       return deferred.promise;
+    }
+
+    function getWorkflowsByUser(username) {
+        var deferred = Q.defer();
+        db.getDocs('_design/workflows_by_user/_view/all?key="'+username+'"').then(function(result) {
+            deferred.resolve(result);
+        });
+        return deferred.promise;
     }
 
     function getCompletedTasksByUser(username) {
