@@ -2,7 +2,7 @@ define(['functions/userFunction', 'couchDB'],
   function(userFunction, db) {
 
     var engine = {
-     // initialize             : initialize,
+      // initialize             : initialize,
       getTemplates           : getTemplates,
       addTemplate            : addTemplate,
       getTemplate            : getTemplate,
@@ -16,23 +16,23 @@ define(['functions/userFunction', 'couchDB'],
       getTasksByUser         : getTasksByUser,
       getCompletedTasksByUser: getCompletedTasksByUser,
       getWaitingTasksByUser  : getWaitingTasksByUser,
-      deleteWorkflows: deleteWorkflows,
-      deleteBlocks: deleteBlocks,
-      deleteTemplates: deleteTemplates,
-      deleteVariables: deleteVariables,
-      getWorkflowsByUser: getWorkflowsByUser
+      deleteWorkflows        : deleteWorkflows,
+      deleteBlocks           : deleteBlocks,
+      deleteTemplates        : deleteTemplates,
+      deleteVariables        : deleteVariables,
+      getWorkflowsByUser     : getWorkflowsByUser
     };
 
     return engine;
-/*
-    function initialize(url, user, pass, dbname) {
-      var deferred = Q.defer();
-      db.initialize(url, user, pass, dbname).then(function() {
-        deferred.resolve({ok: true});
-      });
-      return deferred.promise;
-    }
-*/
+    /*
+     function initialize(url, user, pass, dbname) {
+     var deferred = Q.defer();
+     db.initialize(url, user, pass, dbname).then(function() {
+     deferred.resolve({ok: true});
+     });
+     return deferred.promise;
+     }
+     */
     function getTasksByUser(username) {
       var deferred = Q.defer();
       db.getDocs('_design/tasks_by_user/_view/all?key="' + username + '"').then(function(result) {
@@ -42,11 +42,11 @@ define(['functions/userFunction', 'couchDB'],
     }
 
     function getWorkflowsByUser(username) {
-        var deferred = Q.defer();
-        db.getDocs('_design/workflows_by_user/_view/all?key="'+username+'"').then(function(result) {
-            deferred.resolve(result);
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      db.getDocs('_design/workflows_by_user/_view/all?key="' + username + '"').then(function(result) {
+        deferred.resolve(result);
+      });
+      return deferred.promise;
     }
 
     function getCompletedTasksByUser(username) {
@@ -58,32 +58,32 @@ define(['functions/userFunction', 'couchDB'],
     }
 
     function getWaitingTasksByUser(username) {
-        var deferred = Q.defer();
-        db.getDocs('_design/waiting_tasks_by_user/_view/all?key="'+username+'"').then(function(result) {
-            Q.allSettled(function() {
-                var promises = [];
-                for (var i = 0; i < result.length; i++) {
-                    if (result[i]['value'].cardId) {
-                        promises.push(db.getDoc(result[i]['value'].cardId));
-                    }
+      var deferred = Q.defer();
+      db.getDocs('_design/waiting_tasks_by_user/_view/all?key="' + username + '"').then(function(result) {
+        Q.allSettled(function() {
+            var promises = [];
+            for(var i = 0; i < result.length; i++) {
+              if(result[i]['value'].cardId) {
+                promises.push(db.getDoc(result[i]['value'].cardId));
+              }
+            }
+            return promises;
+          }()).then(function(results) {
+            var docs = [];
+            for(var i = 0; i < results.length; i++) {
+              docs[results[i]['value']._id] = results[i]['value'];
+            }
+            for(var i = 0; i < result.length; i++) {
+              if(result[i]['value'].cardId) {
+                if(docs[result[i]['value'].cardId]) {
+                  result[i].doc = docs[result[i]['value'].cardId];
                 }
-                return promises;
-            }()).then(function(results) {
-                var docs = [];
-                for (var i = 0; i < results.length; i++) {
-                    docs[results[i]['value']._id] = results[i]['value'];
-                }
-                for (var i = 0; i < result.length; i++) {
-                    if (result[i]['value'].cardId) {
-                        if (docs[result[i]['value'].cardId]) {
-                            result[i].doc = docs[result[i]['value'].cardId];
-                        }    
-                    }
-                }
-                deferred.resolve(result);
-            });
-        });
-        return deferred.promise;
+              }
+            }
+            deferred.resolve(result);
+          });
+      });
+      return deferred.promise;
     }
 
     function getTemplates() {
@@ -223,11 +223,11 @@ define(['functions/userFunction', 'couchDB'],
     }
 
     function getVariables() {
-        var deferred = Q.defer();
-        db.getDocs('_design/variables/_view/all').then(function(result) {
-            deferred.resolve(result);
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      db.getDocs('_design/variables/_view/all').then(function(result) {
+        deferred.resolve(result);
+      });
+      return deferred.promise;
     }
 
     function setVariableByName(workflowId, name, upd) {
@@ -537,17 +537,17 @@ define(['functions/userFunction', 'couchDB'],
 
     function orchestrate() {
       var deferred = Q.defer();
-    	getWorkflows().then(function(result) {
-        	Q.allSettled(function() {
-                var promises = [];
-                for (var i = 0; i < result.length; i++) {
-                    promises.push(processingWorkflow(result[i].id));
-                }
-                return promises;
-            }()).then(function(results) {
-                deferred.resolve(results);
-            });
-    	});
+      getWorkflows().then(function(result) {
+        Q.allSettled(function() {
+            var promises = [];
+            for(var i = 0; i < result.length; i++) {
+              promises.push(processingWorkflow(result[i].id));
+            }
+            return promises;
+          }()).then(function(results) {
+            deferred.resolve(results);
+          });
+      });
       return deferred.promise;
     }
 
@@ -572,67 +572,67 @@ define(['functions/userFunction', 'couchDB'],
     }
 
     function deleteWorkflows() {
-        var deferred = Q.defer();
-        getWorkflows().then(function(result) {
-            Q.allSettled(function() {
-                var promises = [];
-                for (var i = 0; i < result.length; i++) {
-                    promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
-                }
-                return promises;
-            }()).then(function(results) {
-                deferred.resolve(results);
-            });
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      getWorkflows().then(function(result) {
+        Q.allSettled(function() {
+            var promises = [];
+            for(var i = 0; i < result.length; i++) {
+              promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
+            }
+            return promises;
+          }()).then(function(results) {
+            deferred.resolve(results);
+          });
+      });
+      return deferred.promise;
     }
-    
+
     function deleteBlocks() {
-        var deferred = Q.defer();
-        getBlocks(undefined).then(function(result) {
-            Q.allSettled(function() {
-                var promises = [];
-                for (var i = 0; i < result.length; i++) {
-                    promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
-                }
-                return promises;
-            }()).then(function(results) {
-                deferred.resolve(results);
-            });
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      getBlocks(undefined).then(function(result) {
+        Q.allSettled(function() {
+            var promises = [];
+            for(var i = 0; i < result.length; i++) {
+              promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
+            }
+            return promises;
+          }()).then(function(results) {
+            deferred.resolve(results);
+          });
+      });
+      return deferred.promise;
     }
-    
+
     function deleteTemplates() {
-        var deferred = Q.defer();
-        getTemplates().then(function(result) {
-            Q.allSettled(function() {
-                var promises = [];
-                for (var i = 0; i < result.length; i++) {
-                    promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
-                }
-                return promises;
-            }()).then(function(results) {
-                deferred.resolve(results);
-            });
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      getTemplates().then(function(result) {
+        Q.allSettled(function() {
+            var promises = [];
+            for(var i = 0; i < result.length; i++) {
+              promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
+            }
+            return promises;
+          }()).then(function(results) {
+            deferred.resolve(results);
+          });
+      });
+      return deferred.promise;
     }
-    
+
     function deleteVariables() {
-        var deferred = Q.defer();
-        getVariables().then(function(result) {
-            Q.allSettled(function() {
-                var promises = [];
-                for (var i = 0; i < result.length; i++) {
-                    promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
-                }
-                return promises;
-            }()).then(function(results) {
-                deferred.resolve(results);
-            });
-        });
-        return deferred.promise;
+      var deferred = Q.defer();
+      getVariables().then(function(result) {
+        Q.allSettled(function() {
+            var promises = [];
+            for(var i = 0; i < result.length; i++) {
+              promises.push(db.deleteDoc(result[i].id, { rev: result[i]['value']._rev }));
+            }
+            return promises;
+          }()).then(function(results) {
+            deferred.resolve(results);
+          });
+      });
+      return deferred.promise;
     }
 
   });

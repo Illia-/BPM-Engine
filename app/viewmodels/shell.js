@@ -10,8 +10,8 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
       login           : login
     };
 
-    viewModel.accessRoutes = ko.computed(function () {
-      return ko.utils.arrayFilter(router.navigationModel(), function (route) {
+    viewModel.accessRoutes = ko.computed(function() {
+      return ko.utils.arrayFilter(router.navigationModel(), function(route) {
         return appSecurity.isUserInRole(route.authorize);
       });
     });
@@ -42,14 +42,14 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
           { route: '', moduleId: 'viewmodels/aboutProject', title: 'BPM engine', nav: false},
           { route: 'login', moduleId: 'viewmodels/login', title: 'Login', nav: false},
           //for user
-          { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Главная', nav:1, authorize: ["user"]},
-          { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Создание карточки', nav: 2, authorize: ["user"]},
+          { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Главная', nav: 1, authorize: ["user"]},
+          { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Запуск сценария', nav: 2, authorize: ["user"]},
           { route: 'user/waitingTasks', moduleId: 'viewmodels/user/waitingTasks', title: 'Входящие задания', nav: 3, authorize: ["user"]},
+          { route: 'user/myWorkflows', moduleId: 'viewmodels/user/myWorkflows', title: 'Мои сценарии', nav: 4, authorize: ["user"]},
           //for admin
-          { route: 'admin/panel', moduleId: 'admin/panel', title: 'Work space', nav: 1, authorize: ["admin"]},
+          { route: 'editor', moduleId: 'viewmodels/admin/editor', title: 'Редактор шаблонов', nav: 2, authorize: ["admin"]},
           //development
-          { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: 10, authorize: ["user","admin"]},
-          { route: 'start', moduleId: 'viewmodels/start', title: 'testStart', nav: false}
+          { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: 10, authorize: ["user", "admin"]}
         ])
         .buildNavigationModel()
         .mapUnknownRoutes("viewmodels/notFound", "not-found");

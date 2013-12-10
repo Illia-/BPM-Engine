@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>Template Editor</title>
+	<link rel="stylesheet" href="../../../css/ui/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="../../../css/jquery.svg.css">
+	<link rel="stylesheet" href="../../../css/bpmTemplateEditor.css">
+</head>
+	<body class="body">
+
+		<div id="svg" class="hasmenu2" style="left: 0; top: 0; width:1400px; height:5000px; position: absolute; background-color: silver; z-index:1;">
+			<div id="task" class="ui-widget-content ui-draggable ui-corner-all hasmenu task" style="position: absolute; z-index:2; display: none;">
+				<h5 class="ui-widget-header header">Задание 1</h5>
+				<p class="blockText"></p>
+			</div>
+			<div id="condition" class="ui-widget-content ui-draggable ui-corner-all hasmenu condition" style="position: absolute; z-index:2; display: none;">
+				<h5 class="ui-widget-header header">Условие 1</h5>
+				<p class="blockText"></p>
+			</div>
+			<div id="function" class="ui-widget-content ui-draggable ui-corner-all hasmenu function" style="position: absolute; z-index:2; display: none;">
+				<h5 class="ui-widget-header header">Функция 1</h5>
+				<p class="blockText"></p>
+			</div>
+		</div>
+
+	<div id="dialog-form-variable" title="Добавление переменной">
+		<p class="validateTips">Поле "Имя переменной" - обязательное.</p>
+		<form>
+			<fieldset>
+				<label for="variable_name">Имя переменной:</label>
+				<input type="text" name="variable_name" id="variable_name" class="text ui-widget-content ui-corner-all">
+				<label for="variable_value">Значение переменной по умолчанию:</label>
+				<input type="text" name="variable_value" id="variable_value" value="" class="text ui-widget-content ui-corner-all">
+				<input type="hidden" name="variable_mode" id="variable_mode" value="add">
+			</fieldset>
+		</form>
+	</div>
+
+	<div id="dialog-form-task" title="Редактирование задания">
+		<p class="validateTips">Все поля обязательны для заполнения.</p>
+		<form>
+			<fieldset>
+				<label for="task_title">Название задания:</label>
+				<input type="text" name="task_title" id="task_title" class="text ui-widget-content ui-corner-all">
+				<label for="task_users">Исполнители:</label>
+				<select name="task_users" id="task_users" class="text ui-widget-content ui-corner-all users" multiple>
+					<option value=""></option>
+				</select>
+				<input type="hidden" name="task_id" id="task_id" value="">
+			</fieldset>
+		</form>
+	</div>
+
+	<div id="dialog-form-function" title="Редактирование блока функции">
+		<p class="validateTips">Все поля обязательны для заполнения.</p>
+		<form>
+			<fieldset>
+				<label for="function_title">Название блока функции:</label>
+				<input type="text" name="function_title" id="function_title" class="text ui-widget-content ui-corner-all">
+				<label for="function_function">Имя функции:</label>
+				<input type="text" name="function_function" id="function_function" class="text ui-widget-content ui-corner-all">
+				<input type="hidden" name="block_id" id="block_id" value="">
+			</fieldset>
+		</form>
+	</div>
+
+	<div id="dialog-form-condition" title="Редактирование условия">
+		<p class="validateTips">Все поля обязательны для заполнения.</p>
+		<form>
+			<fieldset>
+				<label for="condition_title">Название блока условия:</label>
+				<input type="text" name="condition_title" id="condition_title" class="text ui-widget-content ui-corner-all">
+				<label for="condition_vars">Переменная:</label>
+				<select name="condition_vars" id="condition_vars" class="text ui-widget-content ui-corner-all">
+					<option value=""></option>
+				</select><br>
+				<label for="condition_value">= Значение:</label>
+				<input type="text" name="condition_value" id="condition_value" class="text ui-widget-content ui-corner-all">
+				<input type="hidden" name="condition_block_id" id="condition_block_id" value="">
+			</fieldset>
+		</form>
+	</div>
+
+	<div id="dialog-form-template" title="Редактирование названия сценария">
+		<p class="validateTips">Поле "Название сценария" обязательно для заполнения.</p>
+		<form>
+			<fieldset>
+				<label for="template_title">Название сценария:</label>
+				<input type="text" name="template_title" id="template_title" class="text ui-widget-content ui-corner-all">
+			</fieldset>
+		</form>
+	</div>
+
+	<script src="../../../scripts/jquery/jquery-1.9.1.min.js"></script>
+	<script src="../../../scripts/ui/minified/jquery-ui.min.js"></script>
+	<script src="../../../scripts/jquery/jquery.ui-contextmenu.js"></script>
+	<script src="../../../scripts/jquery/jquery.svg.min.js"></script>
+  <script src="../../../scripts/q.js"></script>
+  <script src="http://localhost:5984/couchdb-xd/_design/couchdb-xd/couchdb.js" type="text/javascript"></script>
+  <script src="js/couchDB.js"></script>
+  <script src="js/bpmTemplateEditor.js"></script>
+  <script src="js/runTemplateEditor.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,8 @@
+<section>
+  <div data-bind="foreach: workflows">
+    <div class="workflow" data-bind="attr:{class: 'workflow workflow-' + value.status}">
+      <strong data-bind="text: value.status"></strong>
+      <span data-bind="text:id"></span>
+    </div>
+  </div>
+</section>

@@ -24,7 +24,7 @@ define(['services/bpmEngine', 'services/appSecurity', 'durandal/system', 'couchD
     function activate() {
       return engine.getWaitingTasksByUser(appSecurity.user().name).then(function(data) {
         system.log('--ТАСКИ--');
-        viewModel.tasks = data;
+        viewModel.tasks(data);
         system.log(data);
       })
     }
@@ -41,13 +41,19 @@ define(['services/bpmEngine', 'services/appSecurity', 'durandal/system', 'couchD
           if(typeof file !== 'undefined'){
             db.uploadFile(doc, file).then(function(){
               engine.completeTask(selectedTask().id).then(function(){
-                engine.orchestrate();
+                engine.orchestrate().then(function(){
+                  viewModel.tasks.remove(selectedTask());
+                  selectedTask('');
+                });
               })
             });
           }
           else{
             engine.completeTask(selectedTask().id).then(function(){
-              engine.orchestrate();
+              engine.orchestrate().then(function(){
+                viewModel.tasks.remove(selectedTask());
+                selectedTask('');
+              });
             })
           }
         });
