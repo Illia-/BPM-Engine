@@ -1,6 +1,7 @@
 define([], function() {
 
-  var db,
+  var server,
+    db,
     baseUrl = 'http://localhost:5984',
     //baseUrl = 'http://5fee09f9.ngrok.com',
     dataBase = 'bpm-engine';
@@ -13,8 +14,8 @@ define([], function() {
     copyDoc   : copyDoc,
     getDoc    : getDoc,
     getDocs   : getDocs,
-    uploadFile: uploadFile
-
+    uploadFile: uploadFile,
+    getUsers: getUsers
   };
 
   function initialize() {
@@ -145,6 +146,28 @@ define([], function() {
     };
     return deferred.promise;
   };
+  
+
+  function getUsers() {
+      var db_users = new Couch.Database(server, '_users'),
+          deferred = Q.defer();
+      db_users.get('_design/users/_view/all', function(response) {
+          if (!response.status) { // Если есть поле status в ответе, значит произошла какая-то ошибка
+              var result = [];
+              for (var i = 0; i < response.rows.length; i++) {
+                  var doc = response.rows[i];
+                  result.push(doc);
+              }
+              deferred.resolve(result);
+          } else {
+              alert(response.status + ': ' + response.statusText);
+              deferred.reject();
+          }
+      });
+      return deferred.promise;
+  }
+  
+  
 });
 
 
