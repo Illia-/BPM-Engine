@@ -4,7 +4,7 @@ define(['couchDB', 'durandal/system'],
     var svg,
       modeDrawLine = false,
       readonly = false,
-      from,
+      from = null,
       count = 0,
       tasksCount = 0,
       conditionsCount = 0,
@@ -24,16 +24,22 @@ define(['couchDB', 'durandal/system'],
       }
 
     return self;
-    /*
-     function init(url, user, pass, dbname) {
-     var deferred = Q.defer();
-     db = couchDB();
-     db.initialize(url, user, pass, dbname).then(function(result) {
-     deferred.resolve(result);
-     });
-     return deferred.promise;
+    
+     function init() {
+      modeDrawLine = false;
+      readonly = false;
+      from = null;
+      count = 0;
+      tasksCount = 0;
+      conditionsCount = 0;
+      functionsCount = 0;
+      linesCount = 0;
+      lineType = 'simple';
+      vars = [];
+      blocks = [];
+      template = null;
      }
-     */
+     
     function createBlock(etalon, x, y, title) {
       count++;
       var id = 'block' + count;
@@ -169,7 +175,7 @@ define(['couchDB', 'durandal/system'],
     }
 
     function getXY(elem) {
-      system.log(elem);
+      //system.log(elem);
       var x = $(elem).position().left,
         y = $(elem).position().top,
         w = $(elem).width(),
@@ -180,12 +186,12 @@ define(['couchDB', 'durandal/system'],
 
     function drawLine(r1, r2) {
       linesCount++;
-/*
-      system.log('r1:');
+
+      /*system.log('r1:');
        system.log(r1);
        system.log('r2:');
-       system.log(r2);
-*/
+       system.log(r2);*/
+
       var r1xy = getXY(r1);
       var r2xy = getXY(r2);
       var color = 'black';
@@ -805,7 +811,7 @@ define(['couchDB', 'durandal/system'],
 
       $('#svg').svg({onLoad: initSvg});
 
-      $('.body').contextmenu({
+      $('#svg-container').contextmenu({
         delegate     : ".hasmenu2",
         preventSelect: true,
         taphold      : true,
@@ -887,7 +893,8 @@ define(['couchDB', 'durandal/system'],
                 }
               });
             }
-            $('.body').contextmenu("setEntry", "variables", {title: "Переменные", cmd: "variables", children: vars_names});
+            console.log(vars_names);
+            $('#svg-container').contextmenu("setEntry", "variables", {title: "Переменные", cmd: "variables", children: vars_names});
             return ($target[0].tagName == 'svg');
           }
           else {
@@ -1110,7 +1117,7 @@ define(['couchDB', 'durandal/system'],
     }
 
     function initialize() {
-      readonly = false;
+      init();
       var deferred = Q.defer();
       prepareVariableDialog();
       prepareTaskDialog();
@@ -1123,7 +1130,7 @@ define(['couchDB', 'durandal/system'],
     }
 
     function newTemplate() {
-      readonly = false;
+      init();
       createBlock($('#task'), 400, 8, 'Начало');
       createBlock($('#task'), 400, 500, 'Конец');
     }
@@ -1159,6 +1166,7 @@ define(['couchDB', 'durandal/system'],
     }
 
     function editTemplate(templateId) { //b39a10d39242373069c6d891060097c0
+      init();
       var deferred = Q.defer();
       getTemplate(templateId).then(function(result) {
         template = result[0]['value'];
@@ -1212,7 +1220,6 @@ define(['couchDB', 'durandal/system'],
           for(var j = 0; j < block.linesFrom.length; j++) {
             lineFrom = block.linesFrom[j];
             blockFrom = $("#" + block.id);
-            //debugger;
             blockTo = $("#" + getLineToBlock(result[0]['value'].blocks, lineFrom.id));
             if(blockTo) {
               lineType = lineFrom.type;
@@ -1265,6 +1272,7 @@ define(['couchDB', 'durandal/system'],
     }
 
     function viewWorkflow(workflowId) {
+      init();
       readonly = true;
       var deferred = Q.defer();
       getWorkflow(workflowId).then(function(res1) {
