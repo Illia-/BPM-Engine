@@ -237,8 +237,8 @@ define(['couchDB', 'durandal/system'],
         con.setAttribute('y2', xy.y);
       });
 
-      addLineFrom(r1.id, con.id);
-      addLineTo(r2.id, con.id);
+      addLineFrom($(r1).attr('id'), con.id);
+      addLineTo($(r2).attr('id'), con.id);
 
       //system.log(blocks);
     }
