@@ -8,11 +8,11 @@ define(['services/bpmTemplateEditor', 'services/bpmEngine', 'durandal/system'],
     return viewModel;
 
     function attached() {
-      bpmTemplateEditor.initialize()
+      self.bpmTemplateEditor.initialize()
         .then(function(res1) {
           system.log('runTemplateEditor Main Thread: prepare():');
           system.log(res1);
-          bpmTemplateEditor.editTemplate(self.templateId).then(function(res3) {
+          self.bpmTemplateEditor.editTemplate(self.templateId).then(function(res3) {
             system.log('runTemplateEditor Main Thread: editTemplate():');
             system.log(res3);
           });
@@ -24,6 +24,7 @@ define(['services/bpmTemplateEditor', 'services/bpmEngine', 'durandal/system'],
     }
 
     function activate(templateId) {
+      self.bpmTemplateEditor = bpmTemplateEditor();
       self.templateId = templateId;
       return;
     }
