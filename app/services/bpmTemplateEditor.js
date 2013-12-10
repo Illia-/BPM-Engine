@@ -169,7 +169,7 @@ define(['couchDB', 'durandal/system'],
     }
 
     function getXY(elem) {
-      //system.log(elem);
+      system.log(elem);
       var x = $(elem).position().left,
         y = $(elem).position().top,
         w = $(elem).width(),
@@ -180,12 +180,12 @@ define(['couchDB', 'durandal/system'],
 
     function drawLine(r1, r2) {
       linesCount++;
-
-      /*system.log('r1:');
+/*
+      system.log('r1:');
        system.log(r1);
        system.log('r2:');
-       system.log(r2);*/
-
+       system.log(r2);
+*/
       var r1xy = getXY(r1);
       var r2xy = getXY(r2);
       var color = 'black';
@@ -1212,6 +1212,7 @@ define(['couchDB', 'durandal/system'],
           for(var j = 0; j < block.linesFrom.length; j++) {
             lineFrom = block.linesFrom[j];
             blockFrom = $("#" + block.id);
+            //debugger;
             blockTo = $("#" + getLineToBlock(result[0]['value'].blocks, lineFrom.id));
             if(blockTo) {
               lineType = lineFrom.type;

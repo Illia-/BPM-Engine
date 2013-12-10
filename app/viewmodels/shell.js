@@ -55,7 +55,8 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/
           { route: 'user/waitingTasks', moduleId: 'viewmodels/user/waitingTasks', title: 'Входящие задания', nav: 3, authorize: ["user"]},
           { route: 'user/myWorkflows', moduleId: 'viewmodels/user/myWorkflows', title: 'Мои сценарии', nav: 4, authorize: ["user"]},
           //for admin
-          { route: 'editor', moduleId: 'viewmodels/admin/editor', title: 'Редактор шаблонов', nav: 2, authorize: ["admin", "_admin"]},
+          { route: 'templatesList', moduleId: 'viewmodels/admin/templatesList', title: 'Список шаблонов', nav: 2, authorize: ["admin", "_admin"]},
+          { route: 'editor/:id', moduleId: 'viewmodels/admin/editor', title: 'Редактор шаблонов', nav: false, authorize: ["admin", "_admin"]},
           //development
           { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: 10, authorize: ["user", "admin"]}
         ])
