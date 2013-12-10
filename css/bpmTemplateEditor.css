@@ -17,25 +17,25 @@
 #bottomMost { top: 300px; left: 200px; cursor: move; }
 .ui-widget-header-red {
 	border: 1px solid #e3a1a1;
-	background: #cc0000 url(/images/ui-bg_highlight-soft_red.png) 50% 50% repeat-x;
+	background: #cc0000 url(../images/ui-bg_highlight-soft_red.png) 50% 50% repeat-x;
 	color: #000;
 	font-weight: bold;
 }
 .ui-widget-header-orange {
 	border: 1px solid #e78f08;
-	background: #f6a828 url(/images/ui-bg_highlight-soft_orange.png) 50% 50% repeat-x;
+	background: #f6a828 url(../images/ui-bg_highlight-soft_orange.png) 50% 50% repeat-x;
 	color: #000;
 	font-weight: bold;
 }
 .ui-widget-header-blue {
 	border: 1px solid #77d5f7;
-	background: #0078ae url(/images/ui-bg_highlight-soft_blue.png) 50% 50% repeat-x;
+	background: #0078ae url(../images/ui-bg_highlight-soft_blue.png) 50% 50% repeat-x;
 	font-weight: bold;
 	color: #000;
 }
 .ui-widget-header-green {
 	border: 1px solid #acdd4a;
-	background: #6eac2c url(/images/ui-bg_highlight-soft_green.png) 50% 50% repeat-x;
+	background: #6eac2c url(../images/ui-bg_highlight-soft_green.png) 50% 50% repeat-x;
 	font-weight: bold;
 	color: #000;
 }
