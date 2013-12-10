@@ -1,14 +1,35 @@
-define(['services/bpmTemplateEditor'],
-  function(bpmTemplateEditor) {
+define(['services/bpmTemplateEditor', 'services/bpmEngine', 'durandal/system'],
+  function(bpmTemplateEditor, engine, system) {
 
-    return {activate     : activate,
-      compositionComplete: compositionComplete};
+    var viewModel = {activate: activate,
+      templates              : ko.observableArray([]),
+      showTemplate: showTemplate
+    };
+    return viewModel;
 
-    function activate() {
-      console.log('-33333333-')
+    function showTemplate(template){
+      bpmTemplateEditor.initialize()
+        .then(function(res1) {
+          system.log('runTemplateEditor Main Thread: prepare():');
+          system.log(res1);
+          bpmTemplateEditor.editTemplate(template.id).then(function(res3) {
+            system.log('runTemplateEditor Main Thread: editTemplate():');
+            system.log(res3);
+          });
+        })
+        .fail(function(res2) {
+          system.log('runTemplateEditor Main Thread: prepare():');
+          system.log(res2);
+        })
     }
 
-    function compositionComplete() {
+    function activate() {
+      return engine.getTemplates().then(function(value) {
+        viewModel.templates(value);
+      });
+    }
+
+      /*
       bpmTemplateEditor.initialize()
         .then(function(res1) {
           console.log('runTemplateEditor Main Thread: prepare():');
@@ -29,7 +50,7 @@ define(['services/bpmTemplateEditor'],
           console.log(res2);
         })
     }
-
+*/
     /*
      bpmTemplateEditor.initialize()
      .then(function(res1) {

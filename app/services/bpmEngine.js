@@ -1,5 +1,5 @@
-define(['functions/userFunction', 'couchDB'],
-  function(userFunction, db) {
+define(['functions/userFunction', 'couchDB', 'durandal/system'],
+  function(userFunction, db, system) {
 
     var engine = {
       // initialize             : initialize,
@@ -113,8 +113,8 @@ define(['functions/userFunction', 'couchDB'],
     function getWorkflows() {
       var deferred = Q.defer();
       db.getDocs('_design/workflows/_view/all').then(function(result) {
-        console.log(' --getWorkflows-- ');
-        console.log(result);
+        system.log(' --getWorkflows-- ');
+        system.log(result);
         deferred.resolve(result);
       });
       return deferred.promise;
@@ -258,8 +258,8 @@ define(['functions/userFunction', 'couchDB'],
       var deferred = Q.defer();
       getTemplate(templateId).then(function(res1) {
 
-        console.log('runWorkflow: Selected template:');
-        console.log(res1);
+        system.log('runWorkflow: Selected template:');
+        system.log(res1);
 
         var variables = res1[0]['value'].vars;
         var currentBlock;
@@ -280,11 +280,11 @@ define(['functions/userFunction', 'couchDB'],
           currentBlocks: []
         };
         createWorkflow(workflow).then(function(res2) {
-          console.log('runWorkflow: Created Workflow:');
-          console.log(res2);
+          system.log('runWorkflow: Created Workflow:');
+          system.log(res2);
           getWorkflow(res2.id).then(function(res3) {
-            console.log('runWorkflow: Selected Workflow:');
-            console.log(res3);
+            system.log('runWorkflow: Selected Workflow:');
+            system.log(res3);
             var workflowId = res2.id;
             var workflowRev = res2.rev;
             workflow = res3[0]['value'];
@@ -304,8 +304,8 @@ define(['functions/userFunction', 'couchDB'],
                 return promises;
 
               }()).then(function(results) {
-                console.log('runWorkflow: Created all Variables:');
-                console.log(results);
+                system.log('runWorkflow: Created all Variables:');
+                system.log(results);
 
                 var block = {
                   workflowId: workflow._id,
@@ -317,12 +317,12 @@ define(['functions/userFunction', 'couchDB'],
                   status    : 'commited'
                 };
                 createBlock(block).then(function(res4) {
-                  console.log('runWorkflow: Created start block:');
-                  console.log(res4);
+                  system.log('runWorkflow: Created start block:');
+                  system.log(res4);
                   workflow.currentBlocks = [res4.id];
                   updateWorkflow(workflow._id, workflow).then(function(res5) {
-                    console.log('runWorkflow: Updated Workflow:');
-                    console.log(res5);
+                    system.log('runWorkflow: Updated Workflow:');
+                    system.log(res5);
                     deferred.resolve(res5);
                   });
                 });
@@ -337,8 +337,8 @@ define(['functions/userFunction', 'couchDB'],
     function processingWorkflow(workflowId) {
       var deferred = Q.defer();
       getWorkflow(workflowId).then(function(res1) {
-        console.log('processingWorkflow: Selected Workflow:');
-        console.log(res1);
+        system.log('processingWorkflow: Selected Workflow:');
+        system.log(res1);
         var workflow = res1[0]['value'];
         var workflowRev = workflow['_rev']
         var status = workflow.status;
@@ -346,8 +346,8 @@ define(['functions/userFunction', 'couchDB'],
         if(status != 'completed') {
 
           getBlocks(workflow.currentBlocks).then(function(res2) { // Вынимаем документы типа "block", соответствующие текущим блокам данного сценария
-            console.log('processingWorkflow: Selected current blocks:');
-            console.log(res2);
+            system.log('processingWorkflow: Selected current blocks:');
+            system.log(res2);
             var currentBlocks = res2;
             var linesFrom = [];
 
@@ -359,13 +359,13 @@ define(['functions/userFunction', 'couchDB'],
               }
             }
 
-            console.log('processingWorkflow: Found lines from current blocks:');
-            console.log(linesFrom);
+            system.log('processingWorkflow: Found lines from current blocks:');
+            system.log(linesFrom);
 
             if(linesFrom.length > 0) { // Если хотя бы один из текущих блоков выполнен и потому есть исходящие линии (стрелки)
               getTemplate(workflow.templateId).then(function(res3) { // Получаем объект "template", чтобы получить коллекцию всех блоков шаблона
-                console.log('processingWorkflow: Selected Template:');
-                console.log(res3);
+                system.log('processingWorkflow: Selected Template:');
+                system.log(res3);
                 var template = res3[0]['value'];
                 var nextBlocks = [];
 
@@ -380,8 +380,8 @@ define(['functions/userFunction', 'couchDB'],
 
                 }
 
-                console.log('processingWorkflow: Found next blocks in Template:');
-                console.log(nextBlocks);
+                system.log('processingWorkflow: Found next blocks in Template:');
+                system.log(nextBlocks);
 
                 Q.allSettled(function() {
 
@@ -422,8 +422,8 @@ define(['functions/userFunction', 'couchDB'],
                             createBlock(block).then(function(res4) {
                               workflow.status = 'completed';
                               updateWorkflow(workflow._id, workflow).then(function(res5) {
-                                console.log('processingWorkflow: Updated Workflow:');
-                                console.log(res5);
+                                system.log('processingWorkflow: Updated Workflow:');
+                                system.log(res5);
                                 workflowRev = res5.rev;
                                 status = 'completed';
                                 deferred.resolve(res4);
@@ -464,8 +464,8 @@ define(['functions/userFunction', 'couchDB'],
                             var variable = block_.variable;
                             var value = block_.val;
                             getVariableByName(workflow._id, variable).then(function(res8) {
-                              console.log('processingWorkflow: Selected Variable:');
-                              console.log(res8);
+                              system.log('processingWorkflow: Selected Variable:');
+                              system.log(res8);
                               variable = res8[0]['value'];
                               if(variable.val == value) {
                                 for(var i = 0; i < linesFrom.length; i++) {
@@ -504,8 +504,8 @@ define(['functions/userFunction', 'couchDB'],
                     return promises;
 
                   }()).then(function(results) {
-                    console.log('processingWorkflow: Created all next blocks:');
-                    console.log(results);
+                    system.log('processingWorkflow: Created all next blocks:');
+                    system.log(results);
                     var currentNewBlocks = [];
                     for(var i = 0; i < results.length; i++) {
                       currentNewBlocks.push(results[i]['value']['id']);
@@ -514,8 +514,8 @@ define(['functions/userFunction', 'couchDB'],
                     workflow.status = status;
                     workflow.currentBlocks = currentNewBlocks; // Прописываем id новых текущих блоков для данного сценария
                     updateWorkflow(workflow._id, workflow).then(function(res10) {
-                      console.log('processingWorkflow: Updated Workflow:');
-                      console.log(res10);
+                      system.log('processingWorkflow: Updated Workflow:');
+                      system.log(res10);
                       deferred.resolve(res10);
                     });
                   });
@@ -558,13 +558,13 @@ define(['functions/userFunction', 'couchDB'],
     function completeTask(id) {
       var deferred = Q.defer();
       getBlock(id).then(function(res1) {
-        console.log('completeTask: Selected task:');
-        console.log(res1);
+        system.log('completeTask: Selected task:');
+        system.log(res1);
         var task = res1[0]['value'];
         task.status = 'commited';
         updateBlock(id, task).then(function(res2) {
-          console.log('completeTask: Updated block:');
-          console.log(res2);
+          system.log('completeTask: Updated block:');
+          system.log(res2);
           deferred.resolve(res2);
         });
       });

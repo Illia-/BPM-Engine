@@ -1,5 +1,5 @@
-define(['services/bpmEngine', 'couchDB', 'services/appSecurity'],
-  function(engine, db, appSecurity) {
+define(['services/bpmEngine', 'couchDB', 'services/appSecurity','durandal/app'],
+  function(engine, db, appSecurity, app) {
     var viewModel = {
       activate        : activate,
       createCard      : createCard,
@@ -24,7 +24,8 @@ define(['services/bpmEngine', 'couchDB', 'services/appSecurity'],
         db.uploadFile(doc, file).then(function(uploadedData) {
           engine.runWorkflow(viewModel.selectedWorkflow().value._id, JSON.parse(uploadedData).id, appSecurity.user().name)
             .then(function(data) {
-              engine.orchestrate();
+             app.showMessage('Сценарий запущен!');
+              //engine.orchestrate();
             });
         });
       });
@@ -32,7 +33,6 @@ define(['services/bpmEngine', 'couchDB', 'services/appSecurity'],
 
     function activate() {
       return engine.getTemplates().then(function(value) {
-        console.log(value)
         viewModel.templates(value);
       });
     }

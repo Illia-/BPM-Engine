@@ -8,7 +8,6 @@ define(['services/bpmEngine', 'services/appSecurity'],
 
     function activate(){
       engine.getWorkflowsByUser(appSecurity.user().name).then(function(data){
-        console.log(data);
         viewModel.workflows(data)
       });
     }

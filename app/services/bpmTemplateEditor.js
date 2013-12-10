@@ -1,5 +1,5 @@
-define(['couchDB'],
-  function(db) {
+define(['couchDB', 'durandal/system'],
+  function(db, system) {
 
     var svg,
       modeDrawLine = false,
@@ -44,13 +44,13 @@ define(['couchDB'],
       $el.css('left', x);
       $el.draggable();
       $el.bind('click', function(event, ui) {
-        //console.log(this);
+        //system.log(this);
         if(modeDrawLine) {
           drawLine(from, this);
           modeDrawLine = false;
         }
         else {
-          //console.log(getXY(this));
+          //system.log(getXY(this));
         }
       });
       $el.bind('drag', function(event, ui) {
@@ -59,7 +59,7 @@ define(['couchDB'],
           block = getBlock(id);
         block.x = x;
         block.y = y;
-        //console.log(blocks);
+        //system.log(blocks);
       });
       var $header = $el.find('.header').text(title);
       $header.removeClass('ui-widget-header ui-widget-header-red ui-widget-header-green ui-widget-header-orange ui-widget-header-blue');
@@ -89,7 +89,7 @@ define(['couchDB'],
       }
       $el.show();
       blocks.push({'id': id, 'title': title, 'type': type, 'x': x, 'y': y, 'linesFrom': [], 'linesTo': []});
-      //console.log(blocks);
+      //system.log(blocks);
     }
 
     function getBlock(id) {
@@ -161,7 +161,7 @@ define(['couchDB'],
           break;
         }
       }
-      //console.log(blocks);
+      //system.log(blocks);
     }
 
     function initSvg(_svg) {
@@ -169,7 +169,7 @@ define(['couchDB'],
     }
 
     function getXY(elem) {
-      //console.log(elem);
+      //system.log(elem);
       var x = $(elem).position().left,
         y = $(elem).position().top,
         w = $(elem).width(),
@@ -181,10 +181,10 @@ define(['couchDB'],
     function drawLine(r1, r2) {
       linesCount++;
 
-      /*console.log('r1:');
-       console.log(r1);
-       console.log('r2:');
-       console.log(r2);*/
+      /*system.log('r1:');
+       system.log(r1);
+       system.log('r2:');
+       system.log(r2);*/
 
       var r1xy = getXY(r1);
       var r2xy = getXY(r2);
@@ -202,7 +202,7 @@ define(['couchDB'],
 
       con.id = 'line' + linesCount;
 
-      //console.log(con);
+      //system.log(con);
 
       $(r1).bind('drag', function(event, ui) {
         var xy = getXY(this);
@@ -234,7 +234,7 @@ define(['couchDB'],
       addLineFrom(r1.id, con.id);
       addLineTo(r2.id, con.id);
 
-      //console.log(blocks);
+      //system.log(blocks);
     }
 
     function isVarExists(varName) {
@@ -439,7 +439,7 @@ define(['couchDB'],
       }
 
       function checkSelect(o) {
-        //console.log(o.val());
+        //system.log(o.val());
         if(o.val() == null) {
           o.addClass("ui-state-error");
           updateTips("Необходимо назначить исполнителей.");
@@ -484,7 +484,7 @@ define(['couchDB'],
                   updateTips("Ошибка сохранения задания.");
                 }
                 else {
-                  //console.log(blocks);
+                  //system.log(blocks);
                   $(this).dialog("close");
                 }
               }
@@ -582,7 +582,7 @@ define(['couchDB'],
                   updateTips("Ошибка сохранения функции.");
                 }
                 else {
-                  //console.log(blocks);
+                  //system.log(blocks);
                   $(this).dialog("close");
                 }
               }
@@ -648,7 +648,7 @@ define(['couchDB'],
       }
 
       function checkSelect(o) {
-        //console.log(o.val());
+        //system.log(o.val());
         if(o.val() == null) {
           o.addClass("ui-state-error");
           updateTips("Необходимо выбрать переменную.");
@@ -694,7 +694,7 @@ define(['couchDB'],
                   updateTips("Ошибка сохранения условия.");
                 }
                 else {
-                  //console.log(blocks);
+                  //system.log(blocks);
                   $(this).dialog("close");
                 }
               }
@@ -770,7 +770,7 @@ define(['couchDB'],
                   updateTips("Ошибка сохранения названия сценария.");
                 }
                 else {
-                  //console.log(blocks);
+                  //system.log(blocks);
                   $(this).dialog("close");
                 }
               }
@@ -856,8 +856,8 @@ define(['couchDB'],
           {title  : "Сохранить сценарий", uiIcon: "ui-icon-disk",
             action: function(event, ui) {
               saveTemplate().then(function(result) {
-                //console.log('Updated Template:');
-                //console.log(result);
+                //system.log('Updated Template:');
+                //system.log(result);
               });
               $('.ui-menu').fadeOut(300);
             }
@@ -950,7 +950,7 @@ define(['couchDB'],
                   user;
                 //$target = $(getBlockDiv($target));
                 $target = globalTarget;
-                //console.log($target);
+                //system.log($target);
                 var task = getBlock($target.attr('id'));
                 if(task != null) {
                   $("#dialog-form-task").dialog("open");
@@ -1040,7 +1040,7 @@ define(['couchDB'],
             var $menu = ui.menu,
               $target = ui.target;
             $target = $(getBlockDiv($target));
-            //console.log($target.attr('id'));
+            //system.log($target.attr('id'));
             globalTarget = $target;
             if($target.hasClass('condition')) {
               $('.hasmenu2')
@@ -1166,7 +1166,7 @@ define(['couchDB'],
         var block;
         for(var i = 0; i < template.blocks.length; i++) {
           block = template.blocks[i];
-          //console.log(block);
+          //system.log(block);
           if(block.type == 'start') {
             createBlock($('#task'), block.x, block.y, 'Начало');
           }
@@ -1229,8 +1229,8 @@ define(['couchDB'],
     function saveTemplate() {
       var deferred = Q.defer();
       if(template != null) {
-        //console.log('Before Save Template:');
-        //console.log(template);
+        //system.log('Before Save Template:');
+        //system.log(template);
         db.updateDoc(template._id, template).then(function(result) {
           deferred.resolve(result);
         });
@@ -1270,8 +1270,8 @@ define(['couchDB'],
         var templateId = res1[0]['value'].templateId;
         editTemplate(templateId).then(function(res2) {
           getWorkflowBlocks(workflowId).then(function(res3) {
-            //console.log('Workflow Blocks:');
-            //console.log(res3);
+            //system.log('Workflow Blocks:');
+            //system.log(res3);
             var blocks = res3,
               block;
             for(var i = 0; i < blocks.length; i++) {

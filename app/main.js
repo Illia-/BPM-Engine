@@ -31,9 +31,12 @@ define(['durandal/app', 'durandal/system', 'durandal/viewLocator', 'durandal/bin
 
     //Configures one or more plugins to be loaded and installed into the application.
     app.configurePlugins({
-      router: true
+      router: true,
+      dialog: true
 
     });
+
+
     //plug Q's promise mechanism into Durandal
 
     system.defer = function(action) {

@@ -1,4 +1,4 @@
-define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
+define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/bpmEngine'],
   function(router, appSecurity, login, engine) {
 
     var viewModel = {
@@ -21,6 +21,14 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
     function activate() {
       //configure routing
       router.makeRelative({ moduleId: '' });
+
+      //orchestrate
+      var interval = setInterval(function(){
+          if(appSecurity.user().name){
+            engine.orchestrate();
+          }
+      }, 30000);
+
 
       // If the route has the authorize flag and the user is not logged in => navigate to login view
       router.guardRoute = function(instance, instruction) {
@@ -47,7 +55,7 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login'],
           { route: 'user/waitingTasks', moduleId: 'viewmodels/user/waitingTasks', title: 'Входящие задания', nav: 3, authorize: ["user"]},
           { route: 'user/myWorkflows', moduleId: 'viewmodels/user/myWorkflows', title: 'Мои сценарии', nav: 4, authorize: ["user"]},
           //for admin
-          { route: 'editor', moduleId: 'viewmodels/admin/editor', title: 'Редактор шаблонов', nav: 2, authorize: ["admin"]},
+          { route: 'editor', moduleId: 'viewmodels/admin/editor', title: 'Редактор шаблонов', nav: 2, authorize: ["admin", "_admin"]},
           //development
           { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: 10, authorize: ["user", "admin"]}
         ])

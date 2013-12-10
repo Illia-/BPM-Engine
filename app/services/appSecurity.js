@@ -69,7 +69,6 @@ define([],
     }
 
     self.login = function(credential) {
-      console.log('appSecurity login');
       return self._session("POST", 'name=' + credential.userName + '&password=' + credential.password);
     }
 
