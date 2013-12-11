@@ -44,7 +44,51 @@ define(['functions/userFunction', 'couchDB', 'durandal/system'],
     function getWorkflowsByUser(username) {
       var deferred = Q.defer();
       db.getDocs('_design/workflows_by_user/_view/all?key="' + username + '"').then(function(result) {
-        deferred.resolve(result);
+        system.log('bpmEngine.getWorkflowsByUser(), result object:');
+        system.log(result);
+        Q.allSettled(function() {
+            var promises = [];
+            for(var i = 0; i < result.length; i++) {
+              if(result[i]['value'].cardId) {
+                promises.push(db.getDoc(result[i]['value'].cardId));
+              }
+            }
+            return promises;
+          }()).then(function(results) {
+            var docs = [];
+            for(var i = 0; i < results.length; i++) {
+              docs[results[i]['value']._id] = results[i]['value'];
+            }
+            for(var i = 0; i < result.length; i++) {
+              if(result[i]['value'].cardId) {
+                if(docs[result[i]['value'].cardId]) {
+                  result[i].doc = docs[result[i]['value'].cardId];
+                }
+              }
+            }
+            Q.allSettled(function() {
+                var promises = [];
+                for(var i = 0; i < result.length; i++) {
+                  if(result[i]['value'].templateId) {
+                    promises.push(db.getDoc(result[i]['value'].templateId));
+                  }
+                }
+                return promises;
+              }()).then(function(results2) {
+                var templates = [];
+                for(var i = 0; i < results2.length; i++) {
+                  templates[results2[i]['value']._id] = results2[i]['value'];
+                }
+                for(var i = 0; i < result.length; i++) {
+                  if(result[i]['value'].templateId) {
+                    if(templates[result[i]['value'].templateId]) {
+                      result[i].template = templates[result[i]['value'].templateId];
+                    }
+                  }
+                }
+                deferred.resolve(result);
+              });
+          });
       });
       return deferred.promise;
     }
