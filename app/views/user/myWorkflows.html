@@ -1,8 +1,14 @@
 <section>
   <div data-bind="foreach: workflows">
+    <a class="workflow-link" data-bind="attr: { href: '#user/viewWorkflow/' + id }">
     <div class="workflow" data-bind="attr:{class: 'workflow workflow-' + value.status}">
-      <strong data-bind="text: value.status"></strong>
-      <span data-bind="text:id"></span>
+      <strong data-bind="text: value.status"></strong><br>
+      <span data-bind="text: value.createDate"></span><br>
+      <span data-bind="text: value.updateDate"></span><br>
+      <span data-bind="text: template.title"></span><br>
+      <span data-bind="text: doc.number"></span><br>
+      <span data-bind="text: doc.text"></span>
     </div>
+	</a>
   </div>
 </section>
