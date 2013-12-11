@@ -2,12 +2,12 @@ define(['services/bpmTemplateEditor', 'services/bpmEngine', 'durandal/system'],
   function(bpmTemplateEditor, engine, system) {
 
     var viewModel = {activate: activate,
-        attached: attached
+        compositionComplete: compositionComplete
     },
       self = {};
     return viewModel;
 
-    function attached() {
+    function compositionComplete() {
       self.bpmTemplateEditor.initialize()
         .then(function() {
           self.bpmTemplateEditor.viewWorkflow(self.workflowId);

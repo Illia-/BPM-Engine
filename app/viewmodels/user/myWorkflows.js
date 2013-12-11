@@ -1,5 +1,5 @@
-define(['services/bpmEngine', 'services/appSecurity'],
-  function(engine, appSecurity) {
+define(['services/bpmEngine', 'services/appSecurity', 'helpers/date'],
+  function(engine, appSecurity, date) {
     var viewModel = {
       activate:activate,
       workflows:ko.observableArray([])
@@ -9,10 +9,8 @@ define(['services/bpmEngine', 'services/appSecurity'],
     function activate(){
       engine.getWorkflowsByUser(appSecurity.user().name).then(function(data){
         for (var i = 0; i < data.length; i++) {
-          var dtc = new Date(data[i].value.createDate);
-          var dtu = new Date(data[i].value.updateDate);
-          data[i].value.createDate = dtc.getDate()+'.'+dtc.getMonth()+'.'+dtc.getFullYear()+' '+dtc.getHours()+':'+dtc.getMinutes()+':'+dtc.getSeconds();
-          data[i].value.updateDate = dtu.getDate()+'.'+dtu.getMonth()+'.'+dtu.getFullYear()+' '+dtu.getHours()+':'+dtu.getMinutes()+':'+dtu.getSeconds();
+          data[i].value.createDate = date.formatDate(data[i].value.createDate);
+          data[i].value.updateDate = date.formatDate(data[i].value.createDate);
         }
         viewModel.workflows(data)
       });

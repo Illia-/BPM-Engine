@@ -60,7 +60,7 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/
           { route: 'addTemplate', moduleId: 'viewmodels/admin/addTemplate', title: 'Добавить шаблон', nav: 2, authorize: ["admin", "_admin"]},
           { route: 'editTemplate/:id', moduleId: 'viewmodels/admin/editTemplate', title: 'Редактор шаблонов', nav: false, authorize: ["admin", "_admin"]},
           //development
-          { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: 10, authorize: ["user", "admin"]}
+          { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: false, authorize: ["user", "admin"]}
         ])
         .buildNavigationModel()
         .mapUnknownRoutes("viewmodels/notFound", "not-found");
