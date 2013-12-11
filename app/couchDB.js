@@ -1,10 +1,10 @@
 define([], function() {
 
   var server,
-    db,
-    baseUrl = 'http://localhost:5984',
-    //baseUrl = 'http://5fee09f9.ngrok.com',
-    dataBase = 'bpm-engine';
+      db,
+      baseUrl = 'http://localhost:5984',
+      //baseUrl = 'http://5fee09f9.ngrok.com',
+      dataBase = 'bpm-engine';
 
   return {
     initialize: initialize,
@@ -21,7 +21,7 @@ define([], function() {
   function initialize() {
     var deferred = Q.defer();
     Couch.init(function() {
-      var server = new Couch.Server(baseUrl, null, null);
+      server = new Couch.Server(baseUrl, null, null);
       db = new Couch.Database(server, dataBase);
       deferred.resolve();
     });
