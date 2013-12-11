@@ -1,4 +1,4 @@
-<div id="login">
+<div id="login" style="display: none">
         <div class="page-header">
             <h1>Login to your account   <small>use your site credentials</small></h1>
         </div>
@@ -14,14 +14,14 @@
                     <div class="form-group" data-bind="validationElement: password">
                         <label class="control-label col-lg-4">Password</label>
                         <div class="col-lg-8">
-                            <input class="form-control" type="password"  data-bind="value: password" placeholder="Password">                        
+                            <input class="form-control" type="password"  data-bind="value: password" placeholder="Password">
                         </div>
                     </div>
                     <div class="col-lg-offset-4 mart2">
                         <button type="submit" class="btn btn-primary">Sign in</button>
                         <button type="reset" class="btn btn-default">Reset</button>
-                    </div> 
-                </form>                      
+                    </div>
+                </form>
             </div>
         </div>
         <div class="jumbotron" data-bind="visible: appSecurity.user().name">

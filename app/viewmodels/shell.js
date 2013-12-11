@@ -50,14 +50,14 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/
           { route: '', moduleId: 'viewmodels/aboutProject', title: 'BPM engine', nav: false},
           { route: 'login', moduleId: 'viewmodels/login', title: 'Login', nav: false},
           //for user
-          { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Главная', nav: 1, authorize: ["user"]},
-          { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Запуск сценария', nav: 2, authorize: ["user"]},
-          { route: 'user/waitingTasks', moduleId: 'viewmodels/user/waitingTasks', title: 'Входящие задания', nav: 3, authorize: ["user"]},
-          { route: 'user/myWorkflows', moduleId: 'viewmodels/user/myWorkflows', title: 'Мои сценарии', nav: 4, authorize: ["user"]},
+          { route: 'user/info', moduleId: 'viewmodels/user/info', title: 'Главная', nav: 1, authorize: ["user"], icon: 'icon-home'},
+          { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Запуск сценария', nav: 2, authorize: ["user"], icon: 'icon-dashboard'},
+          { route: 'user/waitingTasks', moduleId: 'viewmodels/user/waitingTasks', title: 'Задания', nav: 3, authorize: ["user"], icon: 'icon-download-alt'},
+          { route: 'user/myWorkflows', moduleId: 'viewmodels/user/myWorkflows', title: 'Мои сценарии', nav: 4, authorize: ["user"], icon: 'icon-list'},
           { route: 'user/viewWorkflow/:id', moduleId: 'viewmodels/user/viewWorkflow', title: 'Просмотреть сценарий', nav: false, authorize: ["user"]},
           //for admin
-          { route: 'templatesList', moduleId: 'viewmodels/admin/templatesList', title: 'Список шаблонов', nav: 2, authorize: ["admin", "_admin"]},
-          { route: 'addTemplate', moduleId: 'viewmodels/admin/addTemplate', title: 'Добавить шаблон', nav: 2, authorize: ["admin", "_admin"]},
+          { route: 'templatesList', moduleId: 'viewmodels/admin/templatesList', title: 'Список шаблонов', nav: 2, authorize: ["admin", "_admin"], icon: 'icon-dashboard'},
+          { route: 'addTemplate', moduleId: 'viewmodels/admin/addTemplate', title: 'Добавить шаблон', nav: 2, authorize: ["admin", "_admin"], icon: 'icon-dashboard'},
           { route: 'editTemplate/:id', moduleId: 'viewmodels/admin/editTemplate', title: 'Редактор шаблонов', nav: false, authorize: ["admin", "_admin"]},
           //development
           { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: false, authorize: ["user", "admin"]}

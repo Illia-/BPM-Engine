@@ -1,43 +1,69 @@
-
-<nav class="navbar navbar-fixed-top" role="navigation" >
+<div class="navbar">
   <div class="navbar-inner">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/#">BPM engine</a>
-    </div>
-    <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav" data-bind="foreach: accessRoutes">
-          <li data-bind="css: { active: isActive }">
-              <a data-bind="attr: { href: hash }, html: title"></a>
+    <ul class="nav pull-right">
+      <li id="fat-menu" class="dropdown">
+        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+          <i class="icon-user"></i>
+          <span data-bind="text: appSecurity.user().name"></span>
+          <i class="icon-caret-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li data-bind="visible: !appSecurity.user().name">
+          <a tabindex="-1"  href="#login">Login</a>
           </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <h4><span class="label label-info" data-bind="text: appSecurity.user().name"></span></h4>
-        </li>
-        <li data-bind="visible: !appSecurity.user().name">
-          <a href="#login">Login</a>
-        </li>
-        <li data-bind="visible: appSecurity.user().name">
-          <a href="#" data-bind="click : login.logout">Logout</a>
-        </li>
-      </ul>
+          <li data-bind="visible: appSecurity.user().name">
+            <a tabindex="-1" href="#" data-bind="click : login.logout">Logout</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <a class="brand" href="index.html">BPM engine</a>
+  </div>
+</div>
+
+<div id="main-menu">
+  <ul class="nav nav-tabs" data-bind="foreach: accessRoutes">
+    <li data-bind="css: { active: isActive }">
+      <a data-bind="attr: { href: hash }">
+        <i data-bind="attr:{class:icon}"></i>
+        <span data-bind="text:title"></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div id="sidebar-nav">
+    <ul id="dashboard-menu" class="nav nav-list" data-bind="foreach: accessRoutes">
+      <li data-bind="css: { active: isActive }">
+        <a data-bind="attr: { href: hash }">
+          <i data-bind="attr:{class:icon}"></i>
+          <span data-bind="text:title"></span>
+        </a>
+      </li>
+    </ul>
+</div>
+
+<div class="content">
+  <div class="container-fluid">
+      <div class="row-fluid" >
+        <div id="faq-content" class="faq-content my-content-height">
+          <!-- ko if: router.isNavigating -->
+          <div class='ajax-loader'>
+            <img src="images/ajax-loader.gif">
+          </div>
+          <!-- /ko -->
+
+          <!-- ko router: {transition:'entrance'} -->
+          <!-- /ko -->
+        </div>
+        <footer>
+            <hr>
+            <p class="pull-right">Design by <a href="http://www.portnine.com" target="_blank">Portnine</a></p>
+            <p>&copy; 2013 <a href="#">Bionic University</a></p>
+        </footer>
+      </div>
     </div>
-  </div>
-</nav>
-
-<section class="main-content">
-  <!-- ko if: router.isNavigating -->
-  <div class='ajax-loader'>
-    <img src="images/ajax-loader.gif">
-  </div>
-  <!-- /ko -->
-
-  <div class="container">
-    <!-- ko router: {transition:'entrance'} -->
-    <!-- /ko -->
-  </div>
-
-</section>
+</div>
 
 
 
