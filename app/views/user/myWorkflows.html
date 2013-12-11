@@ -2,12 +2,20 @@
   <div data-bind="foreach: workflows">
     <a class="workflow-link" data-bind="attr: { href: '#user/viewWorkflow/' + id }">
     <div class="workflow" data-bind="attr:{class: 'workflow workflow-' + value.status}">
-      <strong data-bind="text: value.status"></strong><br>
-      <span data-bind="text: value.createDate"></span><br>
-      <span data-bind="text: value.updateDate"></span><br>
-      <span data-bind="text: template.title"></span><br>
-      <span data-bind="text: doc.number"></span><br>
-      <span data-bind="text: doc.text"></span>
+      <dl  class="dl-horizontal">
+        <dt>Статус</dt>
+        <dd><strong data-bind="text: value.status"></strong></dd>
+        <dt>Дата создания</dt>
+        <dd data-bind="text: value.createDate"></dd>
+        <dt>Дата редактирования</dt>
+        <dd  data-bind="text: value.updateDate"></dd>
+        <dt>Шаблон</dt>
+        <dd data-bind="text: template.title"></dd>
+        <dt>Сценарий</dt>
+        <dd data-bind="text: doc.number"></dd>
+        <dt>Описание</dt>
+        <dd data-bind="text: doc.text"></dd>
+      </dl>
     </div>
 	</a>
   </div>

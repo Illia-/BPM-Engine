@@ -1,8 +1,15 @@
-define(['services/bpmTemplateEditor', 'services/bpmEngine', 'durandal/system'],
-  function(bpmTemplateEditor, engine, system) {
+define(['services/bpmTemplateEditor', 'services/bpmEngine', 'durandal/system', 'durandal/app', 'plugins/router'],
+  function(bpmTemplateEditor, engine, system, app, router) {
 
     var viewModel = {activate: activate,
-        compositionComplete: compositionComplete
+        compositionComplete: compositionComplete,
+        saveTemplate: function(){
+          self.bpmTemplateEditor.saveTemplate().then(function(){
+            app.showMessage('Шаблон сохранен!').then(function(){
+              router.navigate('templatesList');
+            })
+          });
+        }
     },
       self = {};
     return viewModel;

@@ -23,26 +23,11 @@ define(['couchDB', 'durandal/system'],
           newTemplate : newTemplate,
           editTemplate: editTemplate,
           saveTemplate: saveTemplate,
-          viewWorkflow: viewWorkflow
+          viewWorkflow: viewWorkflow,
+          vars: vars
         }
 
       return self;
-
-      /*function init() {
-        modeDrawLine = false;
-        readonly = false;
-        from = null;
-        count = 0;
-        tasksCount = 0;
-        conditionsCount = 0;
-        functionsCount = 0;
-        linesCount = 0;
-        lineType = 'simple';
-        vars = [];
-        blocks = [];
-        template = null;
-      }*/
-
       function createBlock(etalon, x, y, title) {
         system.log('bpmTemplateEditor.createBlock: etalon:');
         system.log(etalon);
