@@ -58,7 +58,7 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/
           //for admin
           { route: 'templatesList', moduleId: 'viewmodels/admin/templatesList', title: 'Список шаблонов', nav: 2, authorize: ["admin", "_admin"]},
           { route: 'addTemplate', moduleId: 'viewmodels/admin/addTemplate', title: 'Добавить шаблон', nav: 2, authorize: ["admin", "_admin"]},
-          { route: 'editor/:id', moduleId: 'viewmodels/admin/editor', title: 'Редактор шаблонов', nav: false, authorize: ["admin", "_admin"]},
+          { route: 'editTemplate/:id', moduleId: 'viewmodels/admin/editTemplate', title: 'Редактор шаблонов', nav: false, authorize: ["admin", "_admin"]},
           //development
           { route: 'development', moduleId: 'viewmodels/development', title: 'Development', nav: 10, authorize: ["user", "admin"]}
         ])
