@@ -41,19 +41,15 @@ define(['services/bpmEngine', 'services/appSecurity', 'durandal/system', 'couchD
           if(typeof file !== 'undefined'){
             db.uploadFile(doc, file).then(function(){
               engine.completeTask(selectedTask().id).then(function(){
-                engine.orchestrate().then(function(){
                   viewModel.tasks.remove(selectedTask());
                   selectedTask('');
-                });
               })
             });
           }
           else{
             engine.completeTask(selectedTask().id).then(function(){
-              engine.orchestrate().then(function(){
                 viewModel.tasks.remove(selectedTask());
                 selectedTask('');
-              });
             })
           }
         });
