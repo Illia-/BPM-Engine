@@ -54,6 +54,7 @@ define(['plugins/router', 'services/appSecurity', 'viewmodels/login', 'services/
           { route: 'user/createCard', moduleId: 'viewmodels/user/createCard', title: 'Запуск сценария', nav: 2, authorize: ["user"]},
           { route: 'user/waitingTasks', moduleId: 'viewmodels/user/waitingTasks', title: 'Входящие задания', nav: 3, authorize: ["user"]},
           { route: 'user/myWorkflows', moduleId: 'viewmodels/user/myWorkflows', title: 'Мои сценарии', nav: 4, authorize: ["user"]},
+          { route: 'user/viewWorkflow/:id', moduleId: 'viewmodels/user/viewWorkflow', title: 'Просмотреть сценарий', nav: false, authorize: ["user"]},
           //for admin
           { route: 'templatesList', moduleId: 'viewmodels/admin/templatesList', title: 'Список шаблонов', nav: 2, authorize: ["admin", "_admin"]},
           { route: 'addTemplate', moduleId: 'viewmodels/admin/addTemplate', title: 'Добавить шаблон', nav: 2, authorize: ["admin", "_admin"]},
