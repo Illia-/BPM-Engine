@@ -151,3 +151,7 @@
   background-color: #f7d4f4;
   border-color: #f1caf0;
 }
+
+.workflow-link:hover {
+  text-decoration: none !important;
+}
