@@ -1,0 +1,146 @@
+{
+   "title": "Согласование договоров",
+   "type": "template",
+   "vars": [
+       {
+           "name": "result",
+           "val": "0"
+       }
+   ],
+   "blocks": [
+       {
+           "id": "block1",
+           "title": "Начало",
+           "type": "start",
+           "x": 400,
+           "y": 10,
+           "linesFrom": [
+               {
+                   "id": "line1"
+               }
+           ],
+           "linesTo": [
+           ]
+       },
+       {
+           "id": "block2",
+           "title": "Конец",
+           "type": "end",
+           "x": 400,
+           "y": 500,
+           "linesFrom": [
+           ],
+           "linesTo": [
+               {
+                   "id": "line6"
+               },
+               {
+                   "id": "line7"
+               }
+           ]
+       },
+       {
+           "id": "block3",
+           "title": "Согласовать договор",
+           "type": "task",
+           "x": 202,
+           "y": 84,
+           "linesFrom": [
+               {
+                   "id": "line2"
+               }
+           ],
+           "linesTo": [
+               {
+                   "id": "line1"
+               }
+           ],
+           "users": [
+               "Jeff"
+           ]
+       },
+       {
+           "id": "block4",
+           "title": "Считываем результат исполнения",
+           "type": "function",
+           "x": 398,
+           "y": 173,
+           "linesFrom": [
+               {
+                   "id": "line3"
+               }
+           ],
+           "linesTo": [
+               {
+                   "id": "line2"
+               }
+           ],
+           "func": "testFunc"
+       },
+       {
+           "id": "block5",
+           "title": "Согласовано?",
+           "type": "condition",
+           "x": 400,
+           "y": 300,
+           "linesFrom": [
+               {
+                   "id": "line4",
+                   "type": "true"
+               },
+               {
+                   "id": "line5",
+                   "type": "false"
+               }
+           ],
+           "linesTo": [
+               {
+                   "id": "line3"
+               }
+           ],
+           "variable": "result",
+           "val": "1"
+       },
+       {
+           "id": "block6",
+           "title": "Согласовать договор",
+           "type": "task",
+           "x": 200,
+           "y": 400,
+           "linesFrom": [
+               {
+                   "id": "line6"
+               }
+           ],
+           "linesTo": [
+               {
+                   "id": "line4"
+               }
+           ],
+           "users": [
+               "Nick"
+           ]
+       },
+       {
+           "id": "block7",
+           "title": "Согласовать договор",
+           "type": "task",
+           "x": 600,
+           "y": 400,
+           "linesFrom": [
+               {
+                   "id": "line7"
+               }
+           ],
+           "linesTo": [
+               {
+                   "id": "line5"
+               }
+           ],
+           "users": [
+               "Peter"
+           ]
+       }
+   ],
+   "createDate": 1386455312723
+}
