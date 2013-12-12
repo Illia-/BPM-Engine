@@ -316,7 +316,7 @@ define(['couchDB', 'durandal/system'],
 
         var name = $("#variable_name"),
           value = $("#variable_value"),
-          mode = $("#variable_mode");
+          mode = $("#variable_mode"),
         allFields = $([]).add(name).add(value),
           tips = $(".validateTips");
         mode.val('add');
@@ -929,7 +929,7 @@ define(['couchDB', 'durandal/system'],
           beforeOpen   : function(event, ui) {
             if(!readonly) {
               var $menu = ui.menu,
-                $target = ui.target
+                $target = ui.target,
               vars_names = [];
               for(var i = 0; i < vars.length; i++) {
                 vars_names.push({title: vars[i].name, uiIcon: "ui-icon-script", cmd: "editVar" + i,
@@ -1200,6 +1200,7 @@ define(['couchDB', 'durandal/system'],
         //init();
         system.log('bpmTemplateEditor.newTemplate:');
         system.log('OK');
+        vars = [];
         template = {
           title : 'New template',
         };
