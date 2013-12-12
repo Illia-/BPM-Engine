@@ -1,0 +1,51 @@
+<section>
+  <div class="col-lg-8" data-bind="if: taskForShow">
+    <form data-bind="submit: saveCard" role="form">
+      <div class="page-header">
+        <h4>Отработка задания</h4>
+      </div>
+      <div class="form-group">
+        <dl class="dl-horizontal" data-bind="with: taskForShow">
+          <dt>Задание:</dt>
+          <dd data-bind="text: task"></dd>
+          <dt>Назначено:</dt>
+          <dd data-bind="text: createDate"></dd>
+          <dt>Сценарий:</dt>
+          <dd data-bind="text: template"></dd>
+          <dt>Номер документа:</dt>
+          <dd data-bind="text: number"></dd>
+          <dt>Краткое содержание:</dt>
+          <dd data-bind="text: description"></dd>
+          <dt>Документ:</dt>
+          <dd data-bind="foreach: attachments">
+            <a data-bind="text: name, attr: {href: url}"></a><br/>
+          </dd>
+        </dl>
+      </div>
+      <div class="form-group">
+      <div class="fileinput fileinput-new" data-provides="fileinput">
+        <span class="btn btn-default btn-file">
+          <span class="fileinput-new">Выбрать документ</span>
+          <span class="fileinput-exists">Изменить</span>
+          <input type="file" data-bind="element: file"></span>
+        <span class="fileinput-filename"></span>
+        <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+      </div>
+    </div>
+    <div class="form-group">
+      <strong class="control-label" >Результат исполнения</strong>
+      <br>
+      <select class="form-control" data-bind="value: selectedResult">
+        <option value="null">выбрать...</option>
+        <option value="true">Согласовать</option>
+        <option value="false">Отклонить</option>
+      </select>
+    </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" >Подтвердить</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+

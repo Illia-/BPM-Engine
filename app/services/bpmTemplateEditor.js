@@ -355,8 +355,8 @@ define(['couchDB', 'durandal/system'],
 
         $("#dialog-form-variable").dialog({
           autoOpen: false,
-          height  : 250,
-          width   : 280,
+          height  : 350,
+          width   : 300,
           modal   : true,
           buttons : [
             {
@@ -489,8 +489,8 @@ define(['couchDB', 'durandal/system'],
 
         $("#dialog-form-task").dialog({
           autoOpen: false,
-          height  : 250,
-          width   : 280,
+          height  : 350,
+          width   : 300,
           modal   : true,
           buttons : [
             {
@@ -593,8 +593,8 @@ define(['couchDB', 'durandal/system'],
 
         $("#dialog-form-function").dialog({
           autoOpen: false,
-          height  : 250,
-          width   : 280,
+          height  : 350,
+          width   : 300,
           modal   : true,
           buttons : [
             {
@@ -712,8 +712,8 @@ define(['couchDB', 'durandal/system'],
 
         $("#dialog-form-condition").dialog({
           autoOpen: false,
-          height  : 250,
-          width   : 280,
+          height  : 350,
+          width   : 300,
           modal   : true,
           buttons : [
             {
@@ -765,6 +765,9 @@ define(['couchDB', 'durandal/system'],
 
       function editTemplateTitle(title) {
         template.title = title;
+        $('#template_name').text(template.title);
+        system.log('!!!! template object:');
+        system.log(template);
         return true;
       }
 
@@ -797,8 +800,8 @@ define(['couchDB', 'durandal/system'],
 
         $("#dialog-form-template").dialog({
           autoOpen: false,
-          height  : 250,
-          width   : 280,
+          height  : 350,
+          width   : 300,
           modal   : true,
           buttons : [
             {
@@ -869,21 +872,21 @@ define(['couchDB', 'durandal/system'],
                 tasksCount++;
                 system.log('bpmTemplateEditor, Click on menu "Задание", event object:');
                 system.log(event);
-                createBlock($('#task'), event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop, 'Задание ' + tasksCount);
+                createBlock($('#task'), event.clientX - svg_container.offset().left, event.clientY - svg_container.offset().top, 'Задание ' + tasksCount);
                 $('.ui-menu').fadeOut(300);
               }
             },
             {title  : "Функция", uiIcon: "ui-icon-newwin",
               action: function(event, ui) {
                 functionsCount++;
-                createBlock($('#function'), event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop, 'Функция ' + functionsCount);
+                createBlock($('#function'), event.clientX - svg_container.offset().left, event.clientY - svg_container.offset().top, 'Функция ' + functionsCount);
                 $('.ui-menu').fadeOut(300);
               }
             },
             {title  : "Условие", uiIcon: "ui-icon-newwin",
               action: function(event, ui) {
                 conditionsCount++;
-                createBlock($('#condition'), event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop, 'Условие ' + conditionsCount);
+                createBlock($('#condition'), event.clientX - svg_container.offset().left, event.clientY - svg_container.offset().top, 'Условие ' + conditionsCount);
                 $('.ui-menu').fadeOut(300);
               }
             },
@@ -891,7 +894,7 @@ define(['couchDB', 'durandal/system'],
             },
             {title  : "Добавить переменную", uiIcon: "ui-icon-plus",
               action: function(event, ui) {
-                $("#dialog-form-variable").dialog("open").dialog("option", "title", "Добавление переменной").dialog("option", "position", [event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop]);
+                $("#dialog-form-variable").dialog("open").dialog("option", "title", "Добавление переменной").dialog("option", "position", [event.clientX, event.clientY - svg_container.offset().top]);
                 $("#button_var_del").hide();
                 $("#variable_mode").val('add');
                 hackButtons();
@@ -905,7 +908,7 @@ define(['couchDB', 'durandal/system'],
               action: function(event, ui) {
                 var $target = ui.target,
                   title = $("#template_title");
-                $("#dialog-form-template").dialog("open").dialog("option", "position", [event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop]);
+                $("#dialog-form-template").dialog("open").dialog("option", "position", [event.clientX, event.clientY - svg_container.offset().top]);
                 system.log('bpmTemplateEditor, Click on menu "Название сценария", template object:');
                 system.log(template);
                 title.val(template.title);
@@ -932,7 +935,7 @@ define(['couchDB', 'durandal/system'],
                 vars_names.push({title: vars[i].name, uiIcon: "ui-icon-script", cmd: "editVar" + i,
                   action              : function(event, ui) {
                     var $menuitem = ui.item;
-                    $("#dialog-form-variable").dialog("open").dialog("option", "title", "Изменение/удаление переменной").dialog("option", "position", [event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop]);
+                    $("#dialog-form-variable").dialog("open").dialog("option", "title", "Изменение/удаление переменной").dialog("option", "position", [event.clientX, event.clientY - svg_container.offset().top]);
                     $("#button_var_del").show();
                     var name = $("#variable_name"),
                       value = $("#variable_value"),
@@ -1018,7 +1021,7 @@ define(['couchDB', 'durandal/system'],
                   system.log($target);
                   var task = getBlock($target.attr('id'));
                   if(task != null) {
-                    $("#dialog-form-task").dialog("open").dialog("option", "position", [event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop]);
+                    $("#dialog-form-task").dialog("open").dialog("option", "position", [event.clientX, event.clientY - svg_container.offset().top]);
                     title.val(task.title);
                     users.find('option').remove();
                     for(var i = 0; i < db_users.length; i++) {
@@ -1041,7 +1044,7 @@ define(['couchDB', 'durandal/system'],
                 //$target = $(getBlockDiv($target));
                 $target = globalTarget;
                 block = getBlock($target.attr('id'));
-                $("#dialog-form-function").dialog("open").dialog("option", "position", [event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop]);
+                $("#dialog-form-function").dialog("open").dialog("option", "position", [event.clientX, event.clientY - svg_container.offset().top]);
                 title.val(block.title);
                 func.val(block.func);
                 $("#block_id").val(block.id);
@@ -1059,7 +1062,7 @@ define(['couchDB', 'durandal/system'],
                 //$target = $(getBlockDiv($target));
                 $target = globalTarget;
                 block = getBlock($target.attr('id'));
-                $("#dialog-form-condition").dialog("open").dialog("option", "position", [event.clientX - svg_container[0].offsetLeft, event.clientY - svg_container[0].offsetTop]);
+                $("#dialog-form-condition").dialog("open").dialog("option", "position", [event.clientX, event.clientY - svg_container.offset().top]);
                 title.val(block.title);
                 condition_vars.find('option').remove();
                 for(var i = 0; i < vars.length; i++) {
@@ -1200,6 +1203,7 @@ define(['couchDB', 'durandal/system'],
         template = {
           title : 'New template',
         };
+        $('#template_name').text(template.title);
         createBlock($('#task'), 400, 8, 'Начало');
         createBlock($('#task'), 400, 500, 'Конец');
       }
@@ -1245,6 +1249,7 @@ define(['couchDB', 'durandal/system'],
         var deferred = Q.defer();
         getTemplate(templateId).then(function(result) {
           template = result[0]['value'];
+          $('#template_name').text(template.title);
           vars = template.vars;
           var block;
           for(var i = 0; i < template.blocks.length; i++) {

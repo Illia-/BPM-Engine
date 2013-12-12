@@ -9,8 +9,10 @@ define(['services/bpmEngine', 'services/appSecurity', 'helpers/date'],
     function activate(){
       engine.getWorkflowsByUser(appSecurity.user().name).then(function(data){
         for (var i = 0; i < data.length; i++) {
-          data[i].value.createDate = date.formatDate(data[i].value.createDate);
-          data[i].value.updateDate = date.formatDate(data[i].value.createDate);
+          var createDate = data[i].value.createDate;
+          data[i].value.createDate = date.formatDate(createDate);
+          data[i].value.createTime = date.formatTime(createDate);
+          data[i].value.updateDate = date.formatDateTime(data[i].value.updateDate);
         }
         viewModel.workflows(data)
       });

@@ -1,9 +1,20 @@
 <section>
-  <div class="col-lg-3">
-    <div class="list-group" data-bind="foreach: templates">
-      <a class="list-group-item" data-bind="attr: { href: '#editTemplate/' + id }">
-        <h4 class="list-group-item-heading" data-bind="text: value.title"></h4>
-      </a>
+  <div class="span6 main-content">
+    <div class="row-fluid">
+        <h2>Шаблоны сценариев</h2>
+        <ul class="cards list-group widget item-summary" style="border-bottom:0px;" data-bind="foreach: templates">
+            
+            <li class="list-group-item">
+                <i class="pull-left muted icon-random" style="margin-top:.3em;"></i>
+                <div>
+                    <p class="title" data-bind="text: value.title"></p>
+                    <p class="info" data-bind="text: value.createDate"></p>
+                    <p class="info" data-bind="text: value.updateDate"></p>
+                </div>
+                <a class="btn btn-mini pull-right" style="margin-top:-30px;" data-bind="attr: { href: '#editTemplate/' + id }">Редактировать шаблон</a>
+            </li>
+            
+        </ul>
     </div>
   </div>
 </section>

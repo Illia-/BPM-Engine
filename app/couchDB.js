@@ -98,7 +98,7 @@ define([], function() {
       }
       else {
         //alert(response.status + ': ' + response.statusText);
-        deferred.reject();
+        deferred.reject(response.status + ': ' + response.statusText);
       }
     });
     return deferred.promise;

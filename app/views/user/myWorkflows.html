@@ -1,14 +1,14 @@
 <div class="span8 main-content">
     <div class="row-fluid">
         <div class="row-fluid">
-            <h2>Запущенные сценарии
-                <span class="info">У Вас <span data-bind="text: workflows().length"></span> запущенных сценариев</span>
+            <h2>Мои сценарии
+                <span class="info">Вы инициировали <span data-bind="text: workflows().length"></span> сценария(ев)</span>
             </h2>
             <ul class="item-summary" data-bind="foreach: workflows">
                 <li>
                     <div class="overview">
-                        <p class="main-detail" data-bind="text: doc.number"></p>
-                        <p class="sub-detail" data-bind="text: value.createDate"></p>
+                        <p class="main-detail" data-bind="text: value.createDate"></p>
+                        <p class="sub-detail" data-bind="text: value.createTime"></p>
                         <!-- ko if: value.status=='completed' -->
                           <span class="label label-success">Завершен</span>
                         <!-- /ko -->
@@ -17,19 +17,22 @@
                         <!-- /ko -->
                     </div>
                     <div class="info pull-left" >
-                        <dl  class="dl-horizontal">
-                          <dt>Дата редактирования</dt>
-                          <dd  data-bind="text: value.updateDate"></dd>
-                          <dt>Шаблон</dt>
+                        <dl class="dl-horizontal">
+                          <dt>Дата изменения:</dt>
+                          <dd data-bind="text: value.updateDate"></dd>
+                          <dt>Название сценария:</dt>
                           <dd data-bind="text: template.title"></dd>
-                          <dt>Описание</dt>
+                          <dt>Номер документа:</dt>
+                          <dd data-bind="text: doc.number"></dd>
+                          <dt>Краткое содержание:</dt>
                           <dd data-bind="text: doc.text"></dd>
                         </dl>
-                        <a class="btn btn-mini" data-bind="attr: { href: '#user/viewWorkflow/' + id }">Show Details</a>
+                        <a class="btn btn-mini" data-bind="attr: { href: '#user/viewWorkflow/' + id }">Просмотр сценария</a>
+                        <a class="btn btn-mini" data-bind="attr: { href: '#user/viewDoc/' + id }">Просмотр документа</a>
                     </div>
                     <div class="clearfix"></div>
                 </li>
             </ul>
         </div>
-       </div>
-   </div>
+    </div>
+</div>

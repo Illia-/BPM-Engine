@@ -20,7 +20,9 @@ define(['functions/userFunction', 'couchDB', 'durandal/system'],
       deleteBlocks           : deleteBlocks,
       deleteTemplates        : deleteTemplates,
       deleteVariables        : deleteVariables,
-      getWorkflowsByUser     : getWorkflowsByUser
+      getWorkflowsByUser     : getWorkflowsByUser,
+      getTask: getTask,
+      getWorkflow: getWorkflow
     };
 
     return engine;
@@ -126,6 +128,47 @@ define(['functions/userFunction', 'couchDB', 'durandal/system'],
             }
             deferred.resolve(result);
           });
+      });
+      return deferred.promise;
+    }
+
+    function getTask(id) {
+      var deferred = Q.defer();
+      db.getDocs('_design/blocks/_view/all?key="' + id + '"').then(function(result) {
+        if (result[0]['value'].cardId) {
+          db.getDoc(result[0]['value'].cardId).then(function(doc) {
+            result.doc = doc;
+            system.log('!!!!!! workflowId:');
+            system.log(result[0]['value'].workflowId);
+            if (result[0]['value'].workflowId) {
+              getWorkflow(result[0]['value'].workflowId).then(function(workflow) {
+                result.workflow = workflow[0]['value'];
+                system.log('!!!!!! workflow:');
+                system.log(workflow);
+                db.getDoc(workflow[0]['value'].templateId).then(function(template) {
+                  system.log('!!!!!! template:');
+                  system.log(template);
+                  result.template = template;
+                  deferred.resolve(result);
+                });
+              });
+            } else {
+              result.template = {
+                title: ''
+              };
+              deferred.resolve(result);
+            }
+          });
+        } else {
+          result.doc = {
+            number: null,
+            text: ''
+          };
+          result.template = {
+            title: ''
+          };
+          deferred.resolve(result);
+        }  
       });
       return deferred.promise;
     }
@@ -288,12 +331,18 @@ define(['functions/userFunction', 'couchDB', 'durandal/system'],
     function setVariable(workflowId, name, val) {
       var deferred = Q.defer();
       getVariableByName(workflowId, name).then(function(res1) {
-        var varId = res1[0].id;
-        var upd = res1[0]['value'];
-        upd.val = val;
-        db.updateDoc(varId, upd).then(function(res2) {
-          deferred.resolve(res2);
-        });
+        system.log('setVariable, variable object:');
+        system.log(res1);
+        if (res1.length > 0) {
+          var varId = res1[0]['value']._id;
+          var upd = res1[0]['value'];
+          upd.val = val;
+          db.updateDoc(varId, upd).then(function(res2) {
+            deferred.resolve(res2);
+          });
+        } else {
+          deferred.resolve(res1);
+        }
       });
       return deferred.promise;
     }
@@ -510,35 +559,39 @@ define(['functions/userFunction', 'couchDB', 'durandal/system'],
                             getVariableByName(workflow._id, variable).then(function(res8) {
                               system.log('processingWorkflow: Selected Variable:');
                               system.log(res8);
-                              variable = res8[0]['value'];
-                              if(variable.val == value) {
-                                for(var i = 0; i < linesFrom.length; i++) {
-                                  if(linesFrom[i].type == 'false') {
-                                    linesFrom.splice(i, 1);
+                              if (res8.length > 0) {
+                                variable = res8[0]['value'];
+                                if(variable.val == value) {
+                                  for(var i = 0; i < linesFrom.length; i++) {
+                                    if(linesFrom[i].type == 'false') {
+                                      linesFrom.splice(i, 1);
+                                    }
                                   }
                                 }
-                              }
-                              else {
-                                for(var i = 0; i < linesFrom.length; i++) {
-                                  if(linesFrom[i].type == 'true') {
-                                    linesFrom.splice(i, 1);
+                                else {
+                                  for(var i = 0; i < linesFrom.length; i++) {
+                                    if(linesFrom[i].type == 'true') {
+                                      linesFrom.splice(i, 1);
+                                    }
                                   }
                                 }
+                                var block = {
+                                  workflowId: workflow._id,
+                                  id        : block_.id,
+                                  type      : 'block',
+                                  blockType : 'condition',
+                                  title     : block_.title,
+                                  cardId    : workflow.cardId,
+                                  linesFrom : linesFrom,
+                                  linesTo   : block_.linesTo,
+                                  status    : 'commited'
+                                };
+                                createBlock(block).then(function(res9) {
+                                  deferred.resolve(res9);
+                                });
+                              } else {
+                                deferred.resolve(res8);
                               }
-                              var block = {
-                                workflowId: workflow._id,
-                                id        : block_.id,
-                                type      : 'block',
-                                blockType : 'condition',
-                                title     : block_.title,
-                                cardId    : workflow.cardId,
-                                linesFrom : linesFrom,
-                                linesTo   : block_.linesTo,
-                                status    : 'commited'
-                              };
-                              createBlock(block).then(function(res9) {
-                                deferred.resolve(res9);
-                              });
                             });
                             return deferred.promise;
                           }());

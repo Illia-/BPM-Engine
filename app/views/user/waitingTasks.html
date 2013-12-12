@@ -1,57 +1,22 @@
 <section>
   <!-- ko if: tasks().length > 0 -->
-  <div class="col-lg-3">
-    <div class="list-group" data-bind="foreach: tasks">
-      <a href="#" class="list-group-item" data-bind="click: $parent.showTask">
-        <h4 class="list-group-item-heading" data-bind="text: value.title"></h4>
-        <p class="list-group-item-text"data-bind="text: value.status"></p>
-      </a>
+  <div class="span6 main-content">
+    <div class="row-fluid">
+        <h2>Входящие задания</h2>
+        <ul class="cards list-group widget item-summary" style="border-bottom:0px;" data-bind="foreach: tasks">
+            
+            <li class="list-group-item">
+                <!--<button class="btn btn-default pull-right btn-sm" style="margin-top: .8em;" data-bind="click: $parent.showTask">Отработать</button>-->
+                <i class="pull-left muted icon-bar-chart" style="margin-top:.3em;"></i>
+                <div>
+                    <p class="title" data-bind="text: value.title"></p>
+                    <p class="info" data-bind="text: value.createDate"></p>
+                </div>
+                <a class="btn btn-mini pull-right" style="margin-top:-30px;" data-bind="attr: { href: '#user/showTask/' + id }">Отработать задание</a>
+            </li>
+            
+        </ul>
     </div>
-  </div>
-
-  <div class="col-lg-1">
-  </div>
-
-
-  <div class="col-lg-8" data-bind="if: taskForShow">
-    <form data-bind="submit: saveCard" role="form">
-      <div class="page-header">
-        <h4>Отработка документа</h4>
-      </div>
-      <div class="form-group">
-        <dl class="dl-horizontal" data-bind="with: taskForShow">
-          <dt>Номер документа</dt>
-          <dd data-bind="text: number"></dd>
-          <dt>Описание</dt>
-          <dd data-bind="text: description"></dd>
-          <dt>Файл</dt>
-          <dd data-bind="foreach: attachments">
-            <a data-bind="text: name, attr: {href: url}"></a><br/>
-          </dd>
-        </dl>
-      </div>
-      <div class="form-group">
-      <div class="fileinput fileinput-new" data-provides="fileinput">
-        <span class="btn btn-default btn-file">
-          <span class="fileinput-new">Выбрать файл</span>
-          <span class="fileinput-exists">Изменить</span>
-          <input type="file" data-bind="element: file"></span>
-        <span class="fileinput-filename"></span>
-        <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label" >Решение</label>
-      <select class="form-control" data-bind="value: selectedResult">
-        <option value="null">выбрать...</option>
-        <option value="true">Согласовать</option>
-        <option value="false">Отклонить</option>
-      </select>
-    </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary" >Подтвердить</button>
-      </div>
-    </form>
   </div>
   <!-- /ko -->
 

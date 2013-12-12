@@ -1,22 +1,8 @@
-define(['services/bpmEngine', 'services/appSecurity', 'durandal/system', 'couchDB'],
-  function(engine, appSecurity, system, db) {
-    var selectedTask = ko.observable(''),
-      viewModel = {
+define(['services/bpmEngine', 'services/appSecurity', 'durandal/system', 'couchDB', 'helpers/date'],
+  function(engine, appSecurity, system, db, date) {
+    var viewModel = {
         activate   : activate,
-        tasks      : ko.observableArray([]),
-        showTask   : showTask,
-        taskForShow: ko.computed(function() {
-            if(selectedTask()) {
-              return {number: selectedTask().doc.number,
-                description : selectedTask().doc.text,
-                attachments : parseAttachments(selectedTask().doc)};
-            }
-            return false;
-          }
-        ),
-        saveCard   : saveCard,
-        file: ko.observable(),
-        selectedResult: ko.observable()
+        tasks      : ko.observableArray([])
       };
 
     return viewModel;
@@ -24,51 +10,12 @@ define(['services/bpmEngine', 'services/appSecurity', 'durandal/system', 'couchD
     function activate() {
       return engine.getWaitingTasksByUser(appSecurity.user().name).then(function(data) {
         system.log('--ТАСКИ--');
+        for (var i = 0; i < data.length; i++) {
+          data[i].value.createDate = date.formatDateTime(data[i].value.createDate);
+        }
         viewModel.tasks(data);
         system.log(data);
       })
-    }
-
-    function saveCard() {
-      var file = viewModel.file().files[0];
-      if(viewModel.selectedResult() !== 'null'){
-        selectedTask().doc.result = (viewModel.selectedResult() == "true" ? 1: 0);
-        if(typeof file !== 'undefined'){
-          delete selectedTask().doc._attachments;
-        }
-        db.updateDoc(selectedTask().doc._id, selectedTask().doc).then(function(doc){
-          console.log(doc);
-          if(typeof file !== 'undefined'){
-            db.uploadFile(doc, file).then(function(){
-              engine.completeTask(selectedTask().id).then(function(){
-                  viewModel.tasks.remove(selectedTask());
-                  selectedTask('');
-              })
-            });
-          }
-          else{
-            engine.completeTask(selectedTask().id).then(function(){
-                viewModel.tasks.remove(selectedTask());
-                selectedTask('');
-            })
-          }
-        });
-
-      }
-    }
-
-    function parseAttachments(doc) {
-      var baseUrl = 'http://localhost:5984/bpm-engine',
-        attachments = [];
-      for(var item in doc._attachments) {
-        attachments.push({name: item, url: baseUrl + '/' + doc._id + '/' + item});
-      }
-      return attachments;
-    }
-
-    function showTask(task) {
-      system.log(task);
-      selectedTask(task);
     }
 
   });
