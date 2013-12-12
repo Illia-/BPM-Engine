@@ -1,8 +1,8 @@
-.task { width: 150px; height: 100px; padding: 1px; }
+.task { width: 150px; height: 100px; padding: 1px; position: absolute; z-index:2; display: none;}
 .task h5 { text-align: center; margin-top: 0px; margin-left: 0px; margin-right: 0px; padding: 0; }
-.condition { width: 150px; height: 100px; padding: 1px; }
+.condition { width: 150px; height: 100px; padding: 1px; position: absolute; z-index:2; display: none;}
 .condition h5 { text-align: center; margin-top: 0px; margin-left: 0px; margin-right: 0px; padding: 0; }
-.function { width: 150px; height: 100px; padding: 1px; }
+.function { width: 150px; height: 100px; padding: 1px; position: absolute; z-index:2; display: none;}
 .function h5 { text-align: center; margin-top: 0px; margin-left: 0px; margin-right: 0px; padding: 0; }
 .ui-menu {z-index: 1000; font-size: 10px;}
 #topMost, #bottomMost {
@@ -54,3 +54,5 @@ h1 { font-size: 1.2em; margin: .6em 0; }
 label {
   font-size: 100%;
 }
+
+#template_name {position: absolute; z-index:100; margin-left: 10px;}
