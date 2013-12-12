@@ -19,5 +19,4 @@ define(['services/bpmTemplateEditor', 'services/bpmEngine', 'durandal/system', '
         viewModel.templates(value);
       });
     }
-
   });
