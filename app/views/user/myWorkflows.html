@@ -4,10 +4,17 @@
             <h2>Мои сценарии
                 <span class="info">Вы инициировали <span data-bind="text: workflows().length"></span> сценария(ев)</span>
             </h2>
-            <ul class="item-summary" data-bind="foreach: workflows">
+            <div class="controls">
+              <select class="form-controls" data-bind="value:statusFilter">
+                <option value="all">Все</option>
+                <option value="runned">Запущенные</option>
+                <option value="completed">Завершенные</option>
+              </select>
+            </div>
+            <ul class="item-summary" data-bind="foreach: filteredWorkflows">
                 <li>
                     <div class="overview">
-                        <p class="main-detail" data-bind="text: value.createDate"></p>
+                        <p class="main-detail" data-bind="text: value.createDateFormatted"></p>
                         <p class="sub-detail" data-bind="text: value.createTime"></p>
                         <!-- ko if: value.status=='completed' -->
                           <span class="label label-success">Завершен</span>
